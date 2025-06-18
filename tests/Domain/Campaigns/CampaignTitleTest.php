@@ -33,6 +33,7 @@ class CampaignTitleTest extends TestCase {
 	public function throws_when_title_is_empty(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Campaign title cannot be empty or whitespace.' );
 
 		CampaignTitle::create( '' );
 	}
@@ -41,6 +42,7 @@ class CampaignTitleTest extends TestCase {
 	public function throws_when_title_is_only_whitespace(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Campaign title cannot be empty or whitespace.' );
 
 		CampaignTitle::create( '     ' );
 	}

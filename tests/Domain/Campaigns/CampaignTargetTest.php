@@ -25,6 +25,7 @@ class CampaignTargetTest extends TestCase {
 	public function throws_when_target_enabled_but_zero_amount(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Target amount must be positive when targeting is enabled, given 0' );
 
 		CampaignTarget::create( true, 0 );
 	}
@@ -33,6 +34,7 @@ class CampaignTargetTest extends TestCase {
 	public function throws_when_target_enabled_but_negative_amount(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Target amount must be positive when targeting is enabled, given -500' );
 
 		CampaignTarget::create( true, -500 );
 	}
@@ -49,6 +51,7 @@ class CampaignTargetTest extends TestCase {
 	public function throws_when_target_disabled_but_positive_amount(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Target amount should be zero when targeting is disabled, given 100' );
 
 		CampaignTarget::create( false, 100 );
 	}
@@ -57,6 +60,7 @@ class CampaignTargetTest extends TestCase {
 	public function throws_when_target_disabled_but_negative_amount(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'Target amount should be zero when targeting is disabled, given -500' );
 
 		CampaignTarget::create( false, -500 );
 	}

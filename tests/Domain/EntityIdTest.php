@@ -28,6 +28,7 @@ class EntityIdTest extends TestCase {
 	public function throws_when_negative_int_provided(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'EntityId must be a positive, given: -123' );
 
 		EntityId::create( -123 );
 	}
@@ -36,6 +37,7 @@ class EntityIdTest extends TestCase {
 	public function throws_when_zero_provided(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'EntityId must be a positive, given: 0' );
 
 		EntityId::create( 0 );
 	}
@@ -53,6 +55,7 @@ class EntityIdTest extends TestCase {
 	public function throws_when_invalid_uuid_provided(): void {
 
 		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'EntityId must be a valid UUID, given: invalid-uuid' );
 
 		EntityId::create( 'invalid-uuid' );
 	}

@@ -15,7 +15,6 @@ use Fundrik\Core\Support\TypeCaster;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\Attributes\UsesFunction;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignDtoFactory::class )]
@@ -25,7 +24,6 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignTarget::class )]
 #[UsesClass( TypeCaster::class )]
 #[UsesClass( ContainerManager::class )]
-#[UsesFunction( 'fundrik' )]
 class CampaignDtoFactoryTest extends TestCase {
 
 	private CampaignDtoFactory $dto_factory;

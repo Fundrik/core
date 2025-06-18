@@ -1,11 +1,4 @@
 <?php
-/**
- * ContainerManager class for managing Fundrik's DI container.
- *
- * @since 1.0.0
- *
- * @internal
- */
 
 declare(strict_types=1);
 

@@ -1,9 +1,4 @@
 <?php
-/**
- * Provides the application-level service for managing campaign retrieval.
- *
- * @since 1.0.0
- */
 
 declare(strict_types=1);
 
@@ -15,7 +10,7 @@ use Fundrik\Core\Domain\Campaigns\CampaignFactory;
 use Fundrik\Core\Domain\EntityId;
 
 /**
- * Application service for coordinating access to campaign data and behavior.
+ * Service for coordinating access to campaign data and behavior.
  *
  * @since 1.0.0
  */

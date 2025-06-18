@@ -18,9 +18,6 @@ final readonly class App {
 	/**
 	 * Retrieves the Fundrik container instance.
 	 *
-	 * This function provides access to the Fundrik dependency injection container.
-	 * The container is managed internally and reused across the plugin lifecycle.
-	 *
 	 * @since 1.0.0
 	 *
 	 * @return Container The instance of the Fundrik container.

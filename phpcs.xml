@@ -24,6 +24,8 @@
 		<exclude name="Universal.Operators.DisallowShortTernary.Found"/>
 		<!-- Disable check for missing @package tag -->
 		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
+		<!-- Disable check for missing file comment -->
+		<exclude name="Squiz.Commenting.FileComment.Missing"/>
 		<!-- @see https://github.com/WordPress/wordpress-develop/pull/5136 -->
 		<exclude name="WordPress.Security.EscapeOutput.ExceptionNotEscaped"/>
 	</rule>

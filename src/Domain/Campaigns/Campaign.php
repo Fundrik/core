@@ -1,9 +1,4 @@
 <?php
-/**
- * Campaign class.
- *
- * @since 1.0.0
- */
 
 declare(strict_types=1);
 
@@ -13,8 +8,6 @@ use Fundrik\Core\Domain\EntityId;
 
 /**
  * Represents a campaign.
- *
- * It is used for managing the campaign data.
  *
  * @since 1.0.0
  */

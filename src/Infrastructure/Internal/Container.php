@@ -1,11 +1,4 @@
 <?php
-/**
- * Dependency Injection Container for Fundrik.
- *
- * @since 1.0.0
- *
- * @internal
- */
 
 declare(strict_types=1);
 

@@ -1,9 +1,4 @@
 <?php
-/**
- * Factory class for creating Campaign instances.
- *
- * @since 1.0.0
- */
 
 declare(strict_types=1);
 

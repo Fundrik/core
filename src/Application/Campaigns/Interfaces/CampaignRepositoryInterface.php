@@ -1,11 +1,4 @@
 <?php
-/**
- * Interface for the Campaign repository.
- *
- * Defines methods for interacting with the campaign repository.
- *
- * @since 1.0.0
- */
 
 declare(strict_types=1);
 
@@ -15,6 +8,11 @@ use Fundrik\Core\Application\Campaigns\CampaignDto;
 use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\EntityId;
 
+/**
+ * Interface for the Campaign repository.
+ *
+ * @since 1.0.0
+ */
 interface CampaignRepositoryInterface {
 
 	/**

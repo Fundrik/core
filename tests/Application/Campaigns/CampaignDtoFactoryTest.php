@@ -10,7 +10,6 @@ use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
 use Fundrik\Core\Domain\EntityId;
-use Fundrik\Core\Infrastructure\Internal\ContainerManager;
 use Fundrik\Core\Support\TypeCaster;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -23,7 +22,6 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
 #[UsesClass( TypeCaster::class )]
-#[UsesClass( ContainerManager::class )]
 class CampaignDtoFactoryTest extends TestCase {
 
 	private CampaignDtoFactory $dto_factory;

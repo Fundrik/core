@@ -25,8 +25,7 @@
 	},
 	"require": {
 		"php": "^8.2",
-		"ramsey/uuid": "^4.7",
-		"illuminate/container": "^12.12"
+		"ramsey/uuid": "^4.7"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
@@ -39,10 +38,7 @@
 	"autoload": {
 		"psr-4": {
 			"Fundrik\\Core\\": "src/"
-		},
-		"files": [
-			"src/Support/helpers.php"
-		]
+		}
 	},
 	"autoload-dev": {
 		"psr-4": {

@@ -7,6 +7,8 @@ namespace Fundrik\Core\Infrastructure\Interfaces;
 /**
  * Interface for dependency provider classes that supply container bindings.
  *
+ * Bindings can be grouped by an optional category, allowing selective retrieval.
+ *
  * @since 1.0.0
  */
 interface DependencyProviderInterface {
@@ -14,7 +16,9 @@ interface DependencyProviderInterface {
 	/**
 	 * Returns container bindings.
 	 *
-	 * @param string $category Optional category of bindings to return.
+	 * @since 1.0.0
+	 *
+	 * @param string $category Optional category name to filter bindings by group.
 	 *
 	 * @return array<string, string|callable|array<string, string|callable>> Bindings array.
 	 */

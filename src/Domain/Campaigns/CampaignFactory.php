@@ -24,6 +24,10 @@ final readonly class CampaignFactory {
 	 * @param CampaignDto $dto The data transfer object containing campaign data.
 	 *
 	 * @return Campaign A new Campaign instance constructed from the DTO.
+	 *
+	 * @throws InvalidEntityIdException       If the ID is invalid.
+	 * @throws InvalidCampaignTitleException  If the title is invalid.
+	 * @throws InvalidCampaignTargetException If the target data is inconsistent.
 	 */
 	public function create( CampaignDto $dto ): Campaign {
 

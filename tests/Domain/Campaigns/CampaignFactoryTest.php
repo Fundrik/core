@@ -9,9 +9,10 @@ use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignFactory;
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
+use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
 use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
 use Fundrik\Core\Support\TypeCaster;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -82,7 +83,7 @@ class CampaignFactoryTest extends TestCase {
 	#[Test]
 	public function throws_when_campaign_target_is_invalid(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTargetException::class );
 		$this->expectExceptionMessage( 'Target amount must be positive when targeting is enabled, given 0' );
 
 		$this->factory->create(
@@ -100,7 +101,7 @@ class CampaignFactoryTest extends TestCase {
 	#[Test]
 	public function throws_when_entity_id_is_invalid(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidEntityIdException::class );
 		$this->expectExceptionMessage( 'EntityId must be a positive, given: -1' );
 
 		$this->factory->create(

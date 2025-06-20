@@ -7,6 +7,8 @@ namespace Fundrik\Core\Application\Campaigns;
 use Fundrik\Core\Application\Campaigns\Interfaces\CampaignRepositoryInterface;
 use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignFactory;
+use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
+use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
 use Fundrik\Core\Domain\EntityId;
 
 /**
@@ -17,11 +19,11 @@ use Fundrik\Core\Domain\EntityId;
 final readonly class CampaignService {
 
 	/**
-	 * CampaignService constructor.
+	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param CampaignFactory             $factory Factory to create Campaign objects from DTOs.
+	 * @param CampaignFactory             $factory    Factory to create Campaign objects from DTOs.
 	 * @param CampaignRepositoryInterface $repository Repository to retrieve campaign DTOs from the database.
 	 */
 	public function __construct(
@@ -37,6 +39,12 @@ final readonly class CampaignService {
 	 * @param EntityId $id The campaign ID.
 	 *
 	 * @return Campaign|null The campaign if found, or null if not found.
+	 *
+	 * @throws InvalidCampaignTitleException If the campaign title is invalid.
+	 * @throws InvalidCampaignTargetException If the campaign target data is invalid.
+	 *
+	 * @note Exceptions from the repository implementation are not caught
+	 *       and must be handled by the caller.
 	 */
 	public function get_campaign_by_id( EntityId $id ): ?Campaign {
 
@@ -51,6 +59,12 @@ final readonly class CampaignService {
 	 * @since 1.0.0
 	 *
 	 * @return Campaign[] An array of campaigns.
+	 *
+	 * @throws InvalidCampaignTitleException If a campaign title is invalid.
+	 * @throws InvalidCampaignTargetException If any campaign target data is invalid.
+	 *
+	 * @note Exceptions from the repository implementation are not caught
+	 *       and must be handled by the caller.
 	 */
 	public function get_all_campaigns(): array {
 
@@ -66,6 +80,14 @@ final readonly class CampaignService {
 	 * Save a campaign (create or update).
 	 *
 	 * @param CampaignDto $dto The campaign DTO to save.
+	 *
+	 * @return bool True on success, false on failure.
+	 *
+	 * @throws InvalidCampaignTitleException If the title is invalid.
+	 * @throws InvalidCampaignTargetException If the target data is invalid.
+	 *
+	 * @note Exceptions from the repository implementation are not caught
+	 *       and must be handled by the caller.
 	 */
 	public function save_campaign( CampaignDto $dto ): bool {
 
@@ -84,6 +106,9 @@ final readonly class CampaignService {
 	 * @param EntityId $id The ID of the campaign to delete.
 	 *
 	 * @return bool True if the campaign was successfully deleted, false otherwise.
+	 *
+	 * @note Exceptions from the repository implementation are not caught
+	 *       and must be handled by the caller.
 	 */
 	public function delete_campaign( EntityId $id ): bool {
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fundrik\Core\Tests\Domain\Campaigns;
 
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
-use InvalidArgumentException;
+use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +32,7 @@ class CampaignTitleTest extends TestCase {
 	#[Test]
 	public function throws_when_title_is_empty(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTitleException::class );
 		$this->expectExceptionMessage( 'Campaign title cannot be empty or whitespace.' );
 
 		CampaignTitle::create( '' );
@@ -41,7 +41,7 @@ class CampaignTitleTest extends TestCase {
 	#[Test]
 	public function throws_when_title_is_only_whitespace(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTitleException::class );
 		$this->expectExceptionMessage( 'Campaign title cannot be empty or whitespace.' );
 
 		CampaignTitle::create( '     ' );

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain\Campaigns;
 
-use InvalidArgumentException;
+use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
 
 /**
  * Represents the campaign's title.
@@ -16,7 +16,7 @@ use InvalidArgumentException;
 final readonly class CampaignTitle {
 
 	/**
-	 * CampaignTitle constructor.
+	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *
@@ -35,14 +35,14 @@ final readonly class CampaignTitle {
 	 *
 	 * @return self A new instance of CampaignTitle.
 	 *
-	 * @throws InvalidArgumentException If the title is empty or whitespace.
+	 * @throws InvalidCampaignTitleException If the title is empty or whitespace.
 	 */
 	public static function create( string $value ): self {
 
 		$value = trim( $value );
 
 		if ( '' === $value ) {
-			throw new InvalidArgumentException( 'Campaign title cannot be empty or whitespace.' );
+			throw new InvalidCampaignTitleException( 'Campaign title cannot be empty or whitespace.' );
 		}
 
 		return new self( $value );

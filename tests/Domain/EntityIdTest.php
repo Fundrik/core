@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Fundrik\Core\Tests\Domain\Campaigns;
 
 use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
 use Fundrik\Core\Support\TypeCaster;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -27,7 +27,7 @@ class EntityIdTest extends TestCase {
 	#[Test]
 	public function throws_when_negative_int_provided(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidEntityIdException::class );
 		$this->expectExceptionMessage( 'EntityId must be a positive, given: -123' );
 
 		EntityId::create( -123 );
@@ -36,7 +36,7 @@ class EntityIdTest extends TestCase {
 	#[Test]
 	public function throws_when_zero_provided(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidEntityIdException::class );
 		$this->expectExceptionMessage( 'EntityId must be a positive, given: 0' );
 
 		EntityId::create( 0 );
@@ -54,7 +54,7 @@ class EntityIdTest extends TestCase {
 	#[Test]
 	public function throws_when_invalid_uuid_provided(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidEntityIdException::class );
 		$this->expectExceptionMessage( 'EntityId must be a valid UUID, given: invalid-uuid' );
 
 		EntityId::create( 'invalid-uuid' );

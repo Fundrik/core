@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain;
 
+use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
 use Fundrik\Core\Support\TypeCaster;
-use InvalidArgumentException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 
@@ -19,7 +19,7 @@ use Ramsey\Uuid\Uuid;
 final readonly class EntityId {
 
 	/**
-	 * EntityId constructor.
+	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *
@@ -38,7 +38,7 @@ final readonly class EntityId {
 	 *
 	 * @return self New instance of EntityId.
 	 *
-	 * @throws InvalidArgumentException If the ID is neither int nor string, or is invalid.
+	 * @throws InvalidEntityIdException If the ID is neither int nor string, or is invalid.
 	 */
 	public static function create( int|string $id ): self {
 
@@ -51,7 +51,7 @@ final readonly class EntityId {
 		}
 
 		// @codeCoverageIgnoreStart
-		throw new InvalidArgumentException( 'EntityId must be int or UUID string' );
+		throw new InvalidEntityIdException( 'EntityId must be int or UUID string' );
 		// @codeCoverageIgnoreEnd
 	}
 
@@ -64,12 +64,12 @@ final readonly class EntityId {
 	 *
 	 * @return self New instance of EntityId.
 	 *
-	 * @throws InvalidArgumentException If the integer ID is not positive.
+	 * @throws InvalidEntityIdException If the integer ID is not positive.
 	 */
 	private static function from_int( int $id ): self {
 
 		if ( $id <= 0 ) {
-			throw new InvalidArgumentException( "EntityId must be a positive, given: {$id}" );
+			throw new InvalidEntityIdException( "EntityId must be a positive, given: {$id}" );
 		}
 
 		return new self( $id );
@@ -84,14 +84,14 @@ final readonly class EntityId {
 	 *
 	 * @return self New instance of EntityId.
 	 *
-	 * @throws InvalidArgumentException If the UUID string is invalid.
+	 * @throws InvalidEntityIdException If the UUID string is invalid.
 	 */
 	private static function from_uuid( string $uuid ): self {
 
 		try {
 			return new self( TypeCaster::to_string( Uuid::fromString( $uuid ) ) );
 		} catch ( InvalidUuidStringException $e ) {
-			throw new InvalidArgumentException(
+			throw new InvalidEntityIdException(
 				message: "EntityId must be a valid UUID, given: {$uuid}",
 				previous: $e
 			);

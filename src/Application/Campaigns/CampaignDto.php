@@ -17,7 +17,7 @@ namespace Fundrik\Core\Application\Campaigns;
 final readonly class CampaignDto {
 
 	/**
-	 * CampaignDto constructor.
+	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *

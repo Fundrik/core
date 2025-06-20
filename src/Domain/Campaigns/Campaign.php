@@ -14,7 +14,7 @@ use Fundrik\Core\Domain\EntityId;
 final readonly class Campaign {
 
 	/**
-	 * Campaign constructor.
+	 * Constructor.
 	 *
 	 * @since 1.0.0
 	 *

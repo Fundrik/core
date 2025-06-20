@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fundrik\Core\Tests\Domain\Campaigns;
 
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
-use InvalidArgumentException;
+use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,7 @@ class CampaignTargetTest extends TestCase {
 	#[Test]
 	public function throws_when_target_enabled_but_zero_amount(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTargetException::class );
 		$this->expectExceptionMessage( 'Target amount must be positive when targeting is enabled, given 0' );
 
 		CampaignTarget::create( true, 0 );
@@ -33,7 +33,7 @@ class CampaignTargetTest extends TestCase {
 	#[Test]
 	public function throws_when_target_enabled_but_negative_amount(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTargetException::class );
 		$this->expectExceptionMessage( 'Target amount must be positive when targeting is enabled, given -500' );
 
 		CampaignTarget::create( true, -500 );
@@ -50,7 +50,7 @@ class CampaignTargetTest extends TestCase {
 	#[Test]
 	public function throws_when_target_disabled_but_positive_amount(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTargetException::class );
 		$this->expectExceptionMessage( 'Target amount should be zero when targeting is disabled, given 100' );
 
 		CampaignTarget::create( false, 100 );
@@ -59,7 +59,7 @@ class CampaignTargetTest extends TestCase {
 	#[Test]
 	public function throws_when_target_disabled_but_negative_amount(): void {
 
-		$this->expectException( InvalidArgumentException::class );
+		$this->expectException( InvalidCampaignTargetException::class );
 		$this->expectExceptionMessage( 'Target amount should be zero when targeting is disabled, given -500' );
 
 		CampaignTarget::create( false, -500 );

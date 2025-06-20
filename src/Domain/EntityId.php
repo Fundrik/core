@@ -10,44 +10,45 @@ use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents the entity's ID.
+ * Value Object representing a unique identifier for an entity.
  *
- * It can either be an positive integer or a valid UUID string.
+ * Accepts non-empty integers or strings (e.g., UUIDs).
+ * Used to strongly type IDs across domain models.
  *
  * @since 1.0.0
  */
 final readonly class EntityId {
 
 	/**
-	 * Constructor.
+	 * Private constructor, use factory method.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int|string $value Entity ID (either an integer or UUID string).
+	 * @param int|string $value Validated identifier.
 	 */
 	private function __construct(
 		public int|string $value
 	) {}
 
 	/**
-	 * Factory method to create a EntityId instance from either int or string.
+	 * Factory method for creating EntityId.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int|string $id The ID (either integer or UUID string).
+	 * @param int|string $value Identifier to validate.
 	 *
-	 * @return self New instance of EntityId.
+	 * @return self A valid EntityId instance.
 	 *
-	 * @throws InvalidEntityIdException If the ID is neither int nor string, or is invalid.
+	 * @throws InvalidEntityIdException If ID is empty or invalid type.
 	 */
-	public static function create( int|string $id ): self {
+	public static function create( int|string $value ): self {
 
-		if ( is_int( $id ) ) {
-			return self::from_int( $id );
+		if ( is_int( $value ) ) {
+			return self::from_int( $value );
 		}
 
-		if ( is_string( $id ) ) {
-			return self::from_uuid( $id );
+		if ( is_string( $value ) ) {
+			return self::from_uuid( $value );
 		}
 
 		// @codeCoverageIgnoreStart
@@ -56,35 +57,35 @@ final readonly class EntityId {
 	}
 
 	/**
-	 * Factory method to create a EntityId instance from an integer.
+	 * Creates an EntityId from a positive integer.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int $id The integer ID.
+	 * @param int $value Positive integer ID.
 	 *
-	 * @return self New instance of EntityId.
+	 * @return self A valid EntityId instance.
 	 *
-	 * @throws InvalidEntityIdException If the integer ID is not positive.
+	 * @throws InvalidEntityIdException If the value is not positive.
 	 */
-	private static function from_int( int $id ): self {
+	private static function from_int( int $value ): self {
 
-		if ( $id <= 0 ) {
-			throw new InvalidEntityIdException( "EntityId must be a positive, given: {$id}" );
+		if ( $value <= 0 ) {
+			throw new InvalidEntityIdException( "EntityId must be a positive, given: {$value}" );
 		}
 
-		return new self( $id );
+		return new self( $value );
 	}
 
 	/**
-	 * Factory method to create a EntityId instance from a UUID string.
+	 * Creates an EntityId from a UUID string.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $uuid The UUID string.
+	 * @param string $uuid A valid UUID string.
 	 *
-	 * @return self New instance of EntityId.
+	 * @return self A valid EntityId instance.
 	 *
-	 * @throws InvalidEntityIdException If the UUID string is invalid.
+	 * @throws InvalidEntityIdException If the UUID is malformed.
 	 */
 	private static function from_uuid( string $uuid ): self {
 

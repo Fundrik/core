@@ -5,20 +5,25 @@ declare(strict_types=1);
 namespace Fundrik\Core\Support;
 
 /**
- * A utility class for type casting.
+ * Utility class for safe and consistent type conversion across application layers.
+ *
+ * Facilitates mapping of raw infrastructure data to strongly typed domain values.
+ * Supports conversion to boolean, integer, string, and ID (int or UUID-like string).
  *
  * @since 1.0.0
  */
 final readonly class TypeCaster {
 
 	/**
-	 * Casts a value to boolean.
+	 * Converts a value to boolean.
+	 *
+	 * Uses PHP's filter_var with FILTER_VALIDATE_BOOLEAN to interpret common boolean representations.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value The value to convert.
+	 * @param mixed $value Input value.
 	 *
-	 * @return bool The converted boolean value.
+	 * @return bool Converted boolean.
 	 */
 	public static function to_bool( mixed $value ): bool {
 
@@ -26,13 +31,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Casts a value to integer.
+	 * Converts a value to integer.
+	 *
+	 * Casts value using (int) operator.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value The value to convert.
+	 * @param mixed $value Input value.
 	 *
-	 * @return int The converted integer value.
+	 * @return int Converted integer.
 	 */
 	public static function to_int( mixed $value ): int {
 
@@ -40,13 +47,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Casts a value to string.
+	 * Converts a value to string.
+	 *
+	 * Casts value to string and trims whitespace.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value The value to convert.
+	 * @param mixed $value Input value.
 	 *
-	 * @return string The converted string value.
+	 * @return string Trimmed string.
 	 */
 	public static function to_string( mixed $value ): string {
 
@@ -54,13 +63,16 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Casts a value to an ID, that can be numeric or UUID-like strings.
+	 * Converts a value to an ID representation.
+	 *
+	 * Returns an integer if the value is a valid integer string,
+	 * otherwise returns a trimmed string (e.g., UUID).
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value The value to convert.
+	 * @param mixed $value Input value.
 	 *
-	 * @return int|string The converted ID as int or string.
+	 * @return int|string Integer ID or string identifier.
 	 */
 	public static function to_id( mixed $value ): int|string {
 

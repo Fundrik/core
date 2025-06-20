@@ -5,22 +5,26 @@ declare(strict_types=1);
 namespace Fundrik\Core\Infrastructure\Interfaces;
 
 /**
- * Interface for dependency provider classes that supply container bindings.
+ * Interface for providing service bindings to the dependency container.
  *
- * Bindings can be grouped by an optional category, allowing selective retrieval.
+ * Supports optional grouping by category for organized registration
+ * and structured dependency resolution.
  *
  * @since 1.0.0
  */
 interface DependencyProviderInterface {
 
 	/**
-	 * Returns container bindings.
+	 * Returns an array of container bindings.
+	 *
+	 * Each binding maps an abstract identifier to a concrete implementation,
+	 * which can be a class name, a callable factory, or a nested group of bindings.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $category Optional category name to filter bindings by group.
+	 * @param string $category Optional category to filter bindings.
 	 *
-	 * @return array<string, string|callable|array<string, string|callable>> Bindings array.
+	 * @return array<string, string|callable|array<string, string|callable>> Bindings keyed by identifier.
 	 */
 	public function get_bindings( string $category = '' ): array;
 }

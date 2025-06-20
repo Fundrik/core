@@ -7,35 +7,35 @@ namespace Fundrik\Core\Domain\Campaigns;
 use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
 
 /**
- * Represents the campaign's title.
+ * Value Object representing campaign title.
  *
- * This class ensures that the title is not empty or whitespace only.
+ * Ensures non-empty, trimmed titles.
  *
  * @since 1.0.0
  */
 final readonly class CampaignTitle {
 
 	/**
-	 * Constructor.
+	 * Private constructor, use factory method.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $value The campaign title.
+	 * @param string $value Campaign title.
 	 */
 	private function __construct(
 		public string $value,
 	) {}
 
 	/**
-	 * Factory method to create a CampaignTitle instance.
+	 * Factory method to create CampaignTitle.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $value The campaign title.
+	 * @param string $value Title string.
 	 *
-	 * @return self A new instance of CampaignTitle.
+	 * @return self New CampaignTitle instance.
 	 *
-	 * @throws InvalidCampaignTitleException If the title is empty or whitespace.
+	 * @throws InvalidCampaignTitleException If title is empty or whitespace.
 	 */
 	public static function create( string $value ): self {
 

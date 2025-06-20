@@ -7,9 +7,9 @@ namespace Fundrik\Core\Domain\Campaigns\Exceptions;
 use InvalidArgumentException;
 
 /**
- * Thrown when a campaign title is invalid.
+ * Exception thrown when a campaign title is invalid.
  *
- * This exception is used when the campaign title is empty or consists only of whitespace.
+ * Typically thrown by CampaignTitle::create when the value is empty or contains only whitespace.
  *
  * @since 1.0.0
  */

@@ -8,28 +8,29 @@ use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Support\TypeCaster;
 
 /**
- * Factory for creating CampaignDto objects from trusted data arrays.
+ * Factory for creating CampaignDto objects from arrays or domain entities.
  *
- * Assumes data has already been validated or is trusted (no checks performed).
+ * Resides in Application layer bridging between raw data and domain models.
+ * Assumes input data is already validated or trusted.
  *
  * @since 1.0.0
  */
 final readonly class CampaignDtoFactory {
 
 	/**
-	 * Create a CampaignDto from an associative array of data.
+	 * Creates a CampaignDto from a raw associative array.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Associative array with keys:
-	 *                    - id            (int|string)
-	 *                    - title         (string)
-	 *                    - is_enabled    (bool)
-	 *                    - is_open       (bool)
-	 *                    - has_target    (bool)
+	 * @param array $data Raw campaign data with keys:
+	 *                    - id (int|string)
+	 *                    - title (string)
+	 *                    - is_enabled (bool)
+	 *                    - is_open (bool)
+	 *                    - has_target (bool)
 	 *                    - target_amount (int).
 	 *
-	 * @return CampaignDto A DTO representing the campaign data.
+	 * @return CampaignDto The constructed DTO.
 	 */
 	public function from_array( array $data ): CampaignDto {
 
@@ -44,13 +45,13 @@ final readonly class CampaignDtoFactory {
 	}
 
 	/**
-	 * Create a CampaignDto from a Campaign.
+	 * Creates a CampaignDto from a Campaign domain entity.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param Campaign $campaign The Campaign entity.
+	 * @param Campaign $campaign The domain Campaign instance.
 	 *
-	 * @return CampaignDto A DTO representing the campaign.
+	 * @return CampaignDto The corresponding DTO.
 	 */
 	public function from_campaign( Campaign $campaign ): CampaignDto {
 

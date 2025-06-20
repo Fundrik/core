@@ -8,26 +8,26 @@ use Fundrik\Core\Application\Campaigns\CampaignDto;
 use Fundrik\Core\Domain\EntityId;
 
 /**
- * Responsible for creating Campaign instances.
+ * Domain factory responsible for creating Campaign entities from DTOs.
  *
- * It validates input data and ensures that the Campaign is correctly initialized.
+ * Performs validation and ensures domain invariants.
  *
  * @since 1.0.0
  */
 final readonly class CampaignFactory {
 
 	/**
-	 * Create a Campaign instance from a CampaignDto.
+	 * Creates a Campaign domain entity from a DTO.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param CampaignDto $dto The data transfer object containing campaign data.
+	 * @param CampaignDto $dto Campaign DTO.
 	 *
-	 * @return Campaign A new Campaign instance constructed from the DTO.
+	 * @return Campaign New Campaign entity.
 	 *
 	 * @throws InvalidEntityIdException       If the ID is invalid.
 	 * @throws InvalidCampaignTitleException  If the title is invalid.
-	 * @throws InvalidCampaignTargetException If the target data is inconsistent.
+	 * @throws InvalidCampaignTargetException If the target data is invalid.
 	 */
 	public function create( CampaignDto $dto ): Campaign {
 

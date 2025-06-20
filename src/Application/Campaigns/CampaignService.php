@@ -12,7 +12,10 @@ use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
 use Fundrik\Core\Domain\EntityId;
 
 /**
- * Service for coordinating access to campaign data and behavior.
+ * Application service for use cases involving Campaign domain entities.
+ *
+ * Coordinates domain logic, DTOs, and persistence.
+ * Handles orchestration of campaign-related operations.
  *
  * @since 1.0.0
  */
@@ -23,8 +26,8 @@ final readonly class CampaignService {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param CampaignFactory             $factory    Factory to create Campaign objects from DTOs.
-	 * @param CampaignRepositoryInterface $repository Repository to retrieve campaign DTOs from the database.
+	 * @param CampaignFactory             $factory Factory for domain Campaign creation.
+	 * @param CampaignRepositoryInterface $repository Repository to access campaign data.
 	 */
 	public function __construct(
 		private CampaignFactory $factory,
@@ -32,19 +35,18 @@ final readonly class CampaignService {
 	) {}
 
 	/**
-	 * Get a campaign by its ID.
+	 * Retrieves a Campaign entity by its ID.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param EntityId $id The campaign ID.
+	 * @param EntityId $id Campaign identifier.
 	 *
-	 * @return Campaign|null The campaign if found, or null if not found.
+	 * @return Campaign|null Returns Campaign if found, otherwise null.
 	 *
-	 * @throws InvalidCampaignTitleException If the campaign title is invalid.
-	 * @throws InvalidCampaignTargetException If the campaign target data is invalid.
+	 * @throws InvalidCampaignTitleException If title validation fails.
+	 * @throws InvalidCampaignTargetException If target validation fails.
 	 *
-	 * @note Exceptions from the repository implementation are not caught
-	 *       and must be handled by the caller.
+	 * @note Exceptions from the repository are propagated up and must be handled by caller.
 	 */
 	public function get_campaign_by_id( EntityId $id ): ?Campaign {
 
@@ -54,17 +56,16 @@ final readonly class CampaignService {
 	}
 
 	/**
-	 * Get all campaigns.
+	 * Retrieves all Campaign entities.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return Campaign[] An array of campaigns.
+	 * @return Campaign[] Array of Campaign objects.
 	 *
-	 * @throws InvalidCampaignTitleException If a campaign title is invalid.
-	 * @throws InvalidCampaignTargetException If any campaign target data is invalid.
+	 * @throws InvalidCampaignTitleException If any campaign title is invalid.
+	 * @throws InvalidCampaignTargetException If any campaign target is invalid.
 	 *
-	 * @note Exceptions from the repository implementation are not caught
-	 *       and must be handled by the caller.
+	 * @note Exceptions from the repository are propagated and must be handled by caller.
 	 */
 	public function get_all_campaigns(): array {
 
@@ -77,17 +78,16 @@ final readonly class CampaignService {
 	}
 
 	/**
-	 * Save a campaign (create or update).
+	 * Saves (creates or updates) a campaign.
 	 *
-	 * @param CampaignDto $dto The campaign DTO to save.
+	 * @since 1.0.0
+	 *
+	 * @param CampaignDto $dto Campaign data transfer object.
 	 *
 	 * @return bool True on success, false on failure.
 	 *
-	 * @throws InvalidCampaignTitleException If the title is invalid.
-	 * @throws InvalidCampaignTargetException If the target data is invalid.
-	 *
-	 * @note Exceptions from the repository implementation are not caught
-	 *       and must be handled by the caller.
+	 * @throws InvalidCampaignTitleException If title validation fails.
+	 * @throws InvalidCampaignTargetException If target validation fails.
 	 */
 	public function save_campaign( CampaignDto $dto ): bool {
 
@@ -99,16 +99,13 @@ final readonly class CampaignService {
 	}
 
 	/**
-	 * Delete a campaign by its ID.
+	 * Deletes a campaign by ID.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param EntityId $id The ID of the campaign to delete.
+	 * @param EntityId $id Campaign identifier.
 	 *
-	 * @return bool True if the campaign was successfully deleted, false otherwise.
-	 *
-	 * @note Exceptions from the repository implementation are not caught
-	 *       and must be handled by the caller.
+	 * @return bool True if deletion succeeded, false otherwise.
 	 */
 	public function delete_campaign( EntityId $id ): bool {
 

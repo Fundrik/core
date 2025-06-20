@@ -7,7 +7,9 @@ namespace Fundrik\Core\Domain\Campaigns;
 use Fundrik\Core\Domain\EntityId;
 
 /**
- * Represents a campaign.
+ * Domain entity representing a fundraising campaign.
+ *
+ * Encapsulates campaign state and business invariants.
  *
  * @since 1.0.0
  */
@@ -18,11 +20,11 @@ final readonly class Campaign {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param EntityId       $id Campaign ID (can be either int or UUID).
-	 * @param CampaignTitle  $title Campaign title.
-	 * @param bool           $is_enabled Flag indicating if the campaign is enabled (visible and accessible).
-	 * @param bool           $is_open Flag indicating if the campaign is open.
-	 * @param CampaignTarget $target Campaign target (enabled status and amount).
+	 * @param EntityId       $id Campaign identifier.
+	 * @param CampaignTitle  $title Campaign title value object.
+	 * @param bool           $is_enabled Whether campaign is enabled.
+	 * @param bool           $is_open Whether campaign is open.
+	 * @param CampaignTarget $target Campaign target value object.
 	 */
 	public function __construct(
 		private EntityId $id,
@@ -33,11 +35,11 @@ final readonly class Campaign {
 	) {}
 
 	/**
-	 * Get campaign id.
+	 * Returns the campaign identifier as int or UUID string.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return int|string Campaign id.
+	 * @return int|string Unique identifier for the campaign.
 	 */
 	public function get_id(): int|string {
 
@@ -45,11 +47,11 @@ final readonly class Campaign {
 	}
 
 	/**
-	 * Get campaign title.
+	 * Returns the campaign title string.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return int|string Campaign title.
+	 * @return string Title of the campaign.
 	 */
 	public function get_title(): string {
 
@@ -57,11 +59,13 @@ final readonly class Campaign {
 	}
 
 	/**
-	 * Check if campaign is enabled.
+	 * Determines whether the campaign is enabled.
+	 *
+	 * Enabled campaigns are visible and accessible.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool True if enabled, false otherwise.
+	 * @return bool True if campaign is enabled.
 	 */
 	public function is_enabled(): bool {
 
@@ -69,11 +73,11 @@ final readonly class Campaign {
 	}
 
 	/**
-	 * Check if campaign is open.
+	 * Determines whether the campaign is open for donations.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool True if open, false otherwise.
+	 * @return bool True if campaign is currently open.
 	 */
 	public function is_open(): bool {
 
@@ -81,11 +85,11 @@ final readonly class Campaign {
 	}
 
 	/**
-	 * Check if target is enabled.
+	 * Determines whether the campaign has a target goal.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return bool True if target is enabled.
+	 * @return bool True if target is defined.
 	 */
 	public function has_target(): bool {
 
@@ -93,11 +97,13 @@ final readonly class Campaign {
 	}
 
 	/**
-	 * Get target amount for campaign.
+	 * Returns the target amount for the campaign.
+	 *
+	 * Returns zero if targeting is disabled.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return int Target amount.
+	 * @return int Campaign target amount in minor units (e.g., cents).
 	 */
 	public function get_target_amount(): int {
 

@@ -7,10 +7,9 @@ namespace Fundrik\Core\Domain\Exceptions;
 use InvalidArgumentException;
 
 /**
- * Thrown when an EntityId is invalid.
+ * Exception thrown when an entity ID is invalid.
  *
- * This exception is used to indicate that an entity identifier
- * is either not a valid UUID or not a positive integer, depending on the context.
+ * Typically thrown by EntityId::create when the ID is not a non-empty int or non-empty string.
  *
  * @since 1.0.0
  */

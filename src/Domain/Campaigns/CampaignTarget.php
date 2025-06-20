@@ -7,22 +7,25 @@ namespace Fundrik\Core\Domain\Campaigns;
 use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
 
 /**
- * Represents the campaign's target status and amount.
+ * Value Object representing campaign fundraising target.
  *
- * This class ensures that the target amount is set only when targeting is enabled,
- * and that it is zero when targeting is disabled.
+ * Enforces the following invariants:
+ * - If targeting is enabled (`$is_enabled === true`), the target amount must be a positive integer.
+ * - If targeting is disabled (`$is_enabled === false`), the target amount must be exactly zero.
+ *
+ * This ensures internal consistency between the intent to fundraise and the specified target amount.
  *
  * @since 1.0.0
  */
 final readonly class CampaignTarget {
 
 	/**
-	 * Constructor.
+	 * Private constructor, use factory method.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool $is_enabled Flag indicating whether targeting is enabled.
-	 * @param int  $amount The target amount (if targeting is enabled).
+	 * @param bool $is_enabled Whether targeting is enabled.
+	 * @param int  $amount Target amount.
 	 */
 	private function __construct(
 		public bool $is_enabled,
@@ -30,17 +33,16 @@ final readonly class CampaignTarget {
 	) {}
 
 	/**
-	 * Factory method to create a CampaignTarget instance.
+	 * Factory method to create a CampaignTarget.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param bool $is_enabled Flag indicating whether targeting is enabled.
-	 * @param int  $amount The target amount (if targeting is enabled).
+	 * @param bool $is_enabled Whether target is enabled.
+	 * @param int  $amount Target amount.
 	 *
-	 * @return self New instance of CampaignTarget.
+	 * @return self New CampaignTarget instance.
 	 *
-	 * @throws InvalidCampaignTargetException If target is enabled but amount is zero,
-	 *                                  or if target is disabled but amount is non-zero.
+	 * @throws InvalidCampaignTargetException On invalid combination of enabled and amount.
 	 */
 	public static function create( bool $is_enabled, int $amount ): self {
 

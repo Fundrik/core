@@ -7,57 +7,56 @@ namespace Fundrik\Core\Infrastructure\Interfaces;
 use Closure;
 
 /**
- * Interface for a Dependency Injection Container used within Fundrik.
+ * Dependency container interface.
+ *
+ * Resolves and registers bindings for runtime use.
  *
  * @since 1.0.0
  */
 interface ContainerInterface {
 
 	/**
-	 * Retrieves a resolved instance of the given class or interface.
+	 * Resolves an instance for the given identifier.
 	 *
-	 * If the binding was registered as a factory or class name, it will be instantiated
-	 * according to the container's resolution rules. Throws an exception if the identifier
-	 * is not bound and not instantiable.
+	 * If the binding is a class name or factory, it will be instantiated or executed accordingly.
+	 * Throws an exception if the identifier is not bound and cannot be auto-resolved.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $id Class or interface name.
+	 * @param string $id Fully qualified class or interface name.
 	 *
-	 * @return object The resolved instance.
+	 * @return object Resolved instance.
 	 *
 	 * @throws RuntimeException If the identifier cannot be resolved.
 	 */
 	public function get( string $id ): object;
 
 	/**
-	 * Determines whether the container has a binding for the given identifier.
+	 * Checks if the container has a binding for the given identifier.
 	 *
-	 * This does not guarantee that the binding is instantiable, only that it exists.
+	 * Does not guarantee the binding is instantiable, only that it exists.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $id Class or interface name.
+	 * @param string $id Fully qualified class or interface name.
 	 *
-	 * @return bool True if the binding exists, false otherwise.
+	 * @return bool True if a binding exists, false otherwise.
 	 */
 	public function has( string $id ): bool;
 
 	/**
-	 * Registers a singleton binding in the container.
+	 * Registers a singleton binding.
 	 *
-	 * A singleton binding ensures that only one instance of the class or closure result
-	 * will be created and shared for all resolutions.
+	 * A singleton is instantiated once and reused for subsequent resolutions.
 	 *
-	 * If $concrete is:
-	 * - `null`: the container will instantiate `$abstract` directly.
-	 * - `string`: the container will resolve the given class name when `$abstract` is requested.
-	 * - `Closure`: the closure will be executed once and its result reused for subsequent resolutions.
+	 * - If `$concrete` is `null`, the container will instantiate `$abstract` directly.
+	 * - If `$concrete` is a `string`, it will be resolved as a class when `$abstract` is requested.
+	 * - If `$concrete` is a `Closure`, it will be invoked once and the result reused.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string              $abstract Class or interface name.
-	 * @param Closure|string|null $concrete Optional concrete implementation or factory closure.
+	 * @param string              $abstract Abstract identifier.
+	 * @param Closure|string|null $concrete Optional implementation or factory.
 	 */
 	public function singleton(
 		// phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.abstractFound

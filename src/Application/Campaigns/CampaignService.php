@@ -7,8 +7,6 @@ namespace Fundrik\Core\Application\Campaigns;
 use Fundrik\Core\Application\Campaigns\Interfaces\CampaignRepositoryInterface;
 use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignFactory;
-use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
-use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
 use Fundrik\Core\Domain\EntityId;
 
 /**
@@ -26,12 +24,12 @@ final readonly class CampaignService {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param CampaignFactory             $factory Factory for domain Campaign creation.
+	 * @param CampaignFactory $factory Factory for domain Campaign creation.
 	 * @param CampaignRepositoryInterface $repository Repository to access campaign data.
 	 */
 	public function __construct(
 		private CampaignFactory $factory,
-		private CampaignRepositoryInterface $repository
+		private CampaignRepositoryInterface $repository,
 	) {}
 
 	/**
@@ -43,16 +41,15 @@ final readonly class CampaignService {
 	 *
 	 * @return Campaign|null Returns Campaign if found, otherwise null.
 	 *
-	 * @throws InvalidCampaignTitleException If title validation fails.
-	 * @throws InvalidCampaignTargetException If target validation fails.
-	 *
 	 * @note Exceptions from the repository are propagated up and must be handled by caller.
 	 */
 	public function get_campaign_by_id( EntityId $id ): ?Campaign {
 
 		$campaign_dto = $this->repository->get_by_id( $id );
 
-		return $campaign_dto ? $this->factory->create( $campaign_dto ) : null;
+		return $campaign_dto
+			? $this->factory->create( $campaign_dto )
+			: null;
 	}
 
 	/**
@@ -60,10 +57,7 @@ final readonly class CampaignService {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return Campaign[] Array of Campaign objects.
-	 *
-	 * @throws InvalidCampaignTitleException If any campaign title is invalid.
-	 * @throws InvalidCampaignTargetException If any campaign target is invalid.
+	 * @return array<Campaign> Array of Campaign objects.
 	 *
 	 * @note Exceptions from the repository are propagated and must be handled by caller.
 	 */
@@ -72,8 +66,8 @@ final readonly class CampaignService {
 		$dto_list = $this->repository->get_all();
 
 		return array_map(
-			fn( CampaignDto $dto ): Campaign => $this->factory->create( $dto ),
-			$dto_list
+			fn ( CampaignDto $dto ): Campaign => $this->factory->create( $dto ),
+			$dto_list,
 		);
 	}
 
@@ -85,9 +79,6 @@ final readonly class CampaignService {
 	 * @param CampaignDto $dto Campaign data transfer object.
 	 *
 	 * @return bool True on success, false on failure.
-	 *
-	 * @throws InvalidCampaignTitleException If title validation fails.
-	 * @throws InvalidCampaignTargetException If target validation fails.
 	 */
 	public function save_campaign( CampaignDto $dto ): bool {
 

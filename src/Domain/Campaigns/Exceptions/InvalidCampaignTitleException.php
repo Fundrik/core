@@ -6,6 +6,7 @@ namespace Fundrik\Core\Domain\Campaigns\Exceptions;
 
 use InvalidArgumentException;
 
+// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Exception thrown when a campaign title is invalid.
  *
@@ -14,3 +15,4 @@ use InvalidArgumentException;
  * @since 1.0.0
  */
 final class InvalidCampaignTitleException extends InvalidArgumentException {}
+// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

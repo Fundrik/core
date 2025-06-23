@@ -24,6 +24,8 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return bool Converted boolean.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_bool( mixed $value ): bool {
 
@@ -40,6 +42,8 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return int Converted integer.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_int( mixed $value ): int {
 
@@ -56,6 +60,8 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return string Trimmed string.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_string( mixed $value ): string {
 
@@ -73,12 +79,14 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return int|string Integer ID or string identifier.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_id( mixed $value ): int|string {
 
 		$int_value = filter_var( $value, FILTER_VALIDATE_INT );
 
-		if ( false !== $int_value ) {
+		if ( $int_value !== false ) {
 			return $int_value;
 		}
 

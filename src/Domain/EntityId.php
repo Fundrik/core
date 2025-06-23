@@ -27,7 +27,7 @@ final readonly class EntityId {
 	 * @param int|string $value Validated identifier.
 	 */
 	private function __construct(
-		public int|string $value
+		public int|string $value,
 	) {}
 
 	/**
@@ -38,8 +38,6 @@ final readonly class EntityId {
 	 * @param int|string $value Identifier to validate.
 	 *
 	 * @return self A valid EntityId instance.
-	 *
-	 * @throws InvalidEntityIdException If ID is empty or invalid type.
 	 */
 	public static function create( int|string $value ): self {
 
@@ -64,8 +62,6 @@ final readonly class EntityId {
 	 * @param int $value Positive integer ID.
 	 *
 	 * @return self A valid EntityId instance.
-	 *
-	 * @throws InvalidEntityIdException If the value is not positive.
 	 */
 	private static function from_int( int $value ): self {
 
@@ -84,17 +80,16 @@ final readonly class EntityId {
 	 * @param string $uuid A valid UUID string.
 	 *
 	 * @return self A valid EntityId instance.
-	 *
-	 * @throws InvalidEntityIdException If the UUID is malformed.
 	 */
 	private static function from_uuid( string $uuid ): self {
 
 		try {
 			return new self( TypeCaster::to_string( Uuid::fromString( $uuid ) ) );
 		} catch ( InvalidUuidStringException $e ) {
+			// phpcs:ignore SlevomatCodingStandard.Functions.RequireSingleLineCall.RequiredSingleLineCall
 			throw new InvalidEntityIdException(
 				message: "EntityId must be a valid UUID, given: {$uuid}",
-				previous: $e
+				previous: $e,
 			);
 		}
 	}

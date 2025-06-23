@@ -22,11 +22,11 @@ final readonly class CampaignDto {
 	 * @since 1.0.0
 	 *
 	 * @param int|string $id Campaign ID (int or UUID string).
-	 * @param string     $title Campaign title.
-	 * @param bool       $is_enabled Whether campaign is enabled (visible/active).
-	 * @param bool       $is_open Whether campaign is open.
-	 * @param bool       $has_target Whether campaign has a fundraising target.
-	 * @param int        $target_amount The fundraising target amount.
+	 * @param string $title Campaign title.
+	 * @param bool $is_enabled Whether campaign is enabled (visible/active).
+	 * @param bool $is_open Whether campaign is open.
+	 * @param bool $has_target Whether campaign has a fundraising target.
+	 * @param int $target_amount The fundraising target amount.
 	 */
 	public function __construct(
 		public int|string $id,

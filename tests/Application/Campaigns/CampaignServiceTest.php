@@ -25,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignFactory::class )]
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
-class CampaignServiceTest extends TestCase {
+final class CampaignServiceTest extends TestCase {
 
 	private CampaignRepositoryInterface&MockInterface $repository;
 
@@ -39,7 +39,7 @@ class CampaignServiceTest extends TestCase {
 
 		$this->service = new CampaignService(
 			new CampaignFactory(),
-			$this->repository
+			$this->repository,
 		);
 	}
 
@@ -49,12 +49,12 @@ class CampaignServiceTest extends TestCase {
 		$campaign_id = EntityId::create( 123 );
 
 		$dto = new CampaignDto(
-			id               : 123,
-			title            : 'Array Campaign',
-			is_enabled       : true,
-			is_open          : true,
-			has_target       : true,
-			target_amount    : 1500,
+			id: 123,
+			title: 'Array Campaign',
+			is_enabled: true,
+			is_open: true,
+			has_target: true,
+			target_amount: 1_500,
 		);
 
 		$this->repository
@@ -88,21 +88,21 @@ class CampaignServiceTest extends TestCase {
 	public function get_all_campaigns_returns_list_of_campaigns(): void {
 
 		$dto1 = new CampaignDto(
-			id               : 123,
-			title            : 'Campaign One',
-			is_enabled       : true,
-			is_open          : true,
-			has_target       : true,
-			target_amount    : 1500,
+			id: 123,
+			title: 'Campaign One',
+			is_enabled: true,
+			is_open: true,
+			has_target: true,
+			target_amount: 1_500,
 		);
 
 		$dto2 = new CampaignDto(
-			id               : 124,
-			title            : 'Campaign Two',
-			is_enabled       : true,
-			is_open          : true,
-			has_target       : true,
-			target_amount    : 1500,
+			id: 124,
+			title: 'Campaign Two',
+			is_enabled: true,
+			is_open: true,
+			has_target: true,
+			target_amount: 1_500,
 		);
 
 		$this->repository
@@ -121,12 +121,12 @@ class CampaignServiceTest extends TestCase {
 	public function save_campaign_inserts_when_not_exists(): void {
 
 		$dto = new CampaignDto(
-			id             : 555,
-			title          : 'New Campaign',
-			is_enabled     : true,
-			is_open        : true,
-			has_target     : false,
-			target_amount  : 0,
+			id: 555,
+			title: 'New Campaign',
+			is_enabled: true,
+			is_open: true,
+			has_target: false,
+			target_amount: 0,
 		);
 
 		$this->repository
@@ -150,12 +150,12 @@ class CampaignServiceTest extends TestCase {
 	public function save_campaign_updates_when_exists(): void {
 
 		$dto = new CampaignDto(
-			id             : 777,
-			title          : 'Existing Campaign',
-			is_enabled     : true,
-			is_open        : false,
-			has_target     : true,
-			target_amount  : 999,
+			id: 777,
+			title: 'Existing Campaign',
+			is_enabled: true,
+			is_open: false,
+			has_target: true,
+			target_amount: 999,
 		);
 
 		$this->repository

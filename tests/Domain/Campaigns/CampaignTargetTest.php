@@ -11,14 +11,14 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignTarget::class )]
-class CampaignTargetTest extends TestCase {
+final class CampaignTargetTest extends TestCase {
 
 	#[Test]
 	public function creates_when_enabled_target_with_amount(): void {
 
-		$target = CampaignTarget::create( true, 1000 );
+		$target = CampaignTarget::create( true, 1_000 );
 
-		$this->assertEquals( 1000, $target->amount );
+		$this->assertEquals( 1_000, $target->amount );
 	}
 
 	#[Test]

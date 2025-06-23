@@ -25,7 +25,7 @@ final readonly class CampaignTarget {
 	 * @since 1.0.0
 	 *
 	 * @param bool $is_enabled Whether targeting is enabled.
-	 * @param int  $amount Target amount.
+	 * @param int $amount Target amount.
 	 */
 	private function __construct(
 		public bool $is_enabled,
@@ -38,20 +38,22 @@ final readonly class CampaignTarget {
 	 * @since 1.0.0
 	 *
 	 * @param bool $is_enabled Whether target is enabled.
-	 * @param int  $amount Target amount.
+	 * @param int $amount Target amount.
 	 *
 	 * @return self New CampaignTarget instance.
-	 *
-	 * @throws InvalidCampaignTargetException On invalid combination of enabled and amount.
 	 */
 	public static function create( bool $is_enabled, int $amount ): self {
 
 		if ( $is_enabled && $amount <= 0 ) {
-			throw new InvalidCampaignTargetException( "Target amount must be positive when targeting is enabled, given {$amount}" );
+			throw new InvalidCampaignTargetException(
+				"Target amount must be positive when targeting is enabled, given {$amount}",
+			);
 		}
 
-		if ( ! $is_enabled && 0 !== $amount ) {
-			throw new InvalidCampaignTargetException( "Target amount should be zero when targeting is disabled, given {$amount}" );
+		if ( ! $is_enabled && $amount !== 0 ) {
+			throw new InvalidCampaignTargetException(
+				"Target amount should be zero when targeting is disabled, given {$amount}",
+			);
 		}
 
 		return new self( $is_enabled, $amount );

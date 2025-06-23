@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
 #[UsesClass( TypeCaster::class )]
-class CampaignFactoryTest extends TestCase {
+final class CampaignFactoryTest extends TestCase {
 
 	private CampaignFactory $factory;
 
@@ -45,8 +45,8 @@ class CampaignFactoryTest extends TestCase {
 				is_enabled: true,
 				is_open: false,
 				has_target: true,
-				target_amount: 1000,
-			)
+				target_amount: 1_000,
+			),
 		);
 
 		$this->assertInstanceOf( Campaign::class, $campaign );
@@ -56,7 +56,7 @@ class CampaignFactoryTest extends TestCase {
 		$this->assertEquals( true, $campaign->is_enabled() );
 		$this->assertEquals( false, $campaign->is_open() );
 		$this->assertEquals( true, $campaign->has_target() );
-		$this->assertEquals( 1000, $campaign->get_target_amount() );
+		$this->assertEquals( 1_000, $campaign->get_target_amount() );
 	}
 
 	#[Test]
@@ -72,7 +72,7 @@ class CampaignFactoryTest extends TestCase {
 				is_open: true,
 				has_target: false,
 				target_amount: 0,
-			)
+			),
 		);
 
 		$this->assertInstanceOf( Campaign::class, $campaign );
@@ -94,7 +94,7 @@ class CampaignFactoryTest extends TestCase {
 				is_open: true,
 				has_target: true,
 				target_amount: 0,
-			)
+			),
 		);
 	}
 
@@ -112,7 +112,7 @@ class CampaignFactoryTest extends TestCase {
 				is_open: true,
 				has_target: false,
 				target_amount: 0,
-			)
+			),
 		);
 	}
 }

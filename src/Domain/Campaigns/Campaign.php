@@ -20,10 +20,10 @@ final readonly class Campaign {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param EntityId       $id Campaign identifier.
-	 * @param CampaignTitle  $title Campaign title value object.
-	 * @param bool           $is_enabled Whether campaign is enabled.
-	 * @param bool           $is_open Whether campaign is open.
+	 * @param EntityId $id Campaign identifier.
+	 * @param CampaignTitle $title Campaign title value object.
+	 * @param bool $is_enabled Whether campaign is enabled.
+	 * @param bool $is_open Whether campaign is open.
 	 * @param CampaignTarget $target Campaign target value object.
 	 */
 	public function __construct(

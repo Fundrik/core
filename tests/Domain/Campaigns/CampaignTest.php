@@ -28,8 +28,8 @@ final class CampaignTest extends TestCase {
 			id: EntityId::create( $id ),
 			title: CampaignTitle::create( 'Test Campaign' ),
 			is_enabled: true,
-			is_open:  false,
-			target: CampaignTarget::create( true, 1000 ),
+			is_open: false,
+			target: CampaignTarget::create( true, 1_000 ),
 		);
 
 		$this->assertEquals( $id, $campaign->get_id() );
@@ -37,7 +37,7 @@ final class CampaignTest extends TestCase {
 		$this->assertTrue( $campaign->is_enabled() );
 		$this->assertFalse( $campaign->is_open() );
 		$this->assertTrue( $campaign->has_target() );
-		$this->assertEquals( 1000, $campaign->get_target_amount() );
+		$this->assertEquals( 1_000, $campaign->get_target_amount() );
 	}
 
 	#[Test]

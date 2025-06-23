@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
 #[UsesClass( TypeCaster::class )]
-class CampaignDtoFactoryTest extends TestCase {
+final class CampaignDtoFactoryTest extends TestCase {
 
 	private CampaignDtoFactory $dto_factory;
 
@@ -35,12 +35,12 @@ class CampaignDtoFactoryTest extends TestCase {
 	public function creates_dto_from_array(): void {
 
 		$data = [
-			'id'            => 123,
-			'title'         => 'Array Campaign',
-			'is_enabled'    => true,
-			'is_open'       => true,
-			'has_target'    => true,
-			'target_amount' => 1500,
+			'id' => 123,
+			'title' => 'Array Campaign',
+			'is_enabled' => true,
+			'is_open' => true,
+			'has_target' => true,
+			'target_amount' => 1_500,
 		];
 
 		$dto = $this->dto_factory->from_array( $data );
@@ -51,18 +51,18 @@ class CampaignDtoFactoryTest extends TestCase {
 		$this->assertTrue( $dto->is_enabled );
 		$this->assertTrue( $dto->is_open );
 		$this->assertTrue( $dto->has_target );
-		$this->assertEquals( 1500, $dto->target_amount );
+		$this->assertEquals( 1_500, $dto->target_amount );
 	}
 
 	#[Test]
 	public function from_array_casts_types_correctly(): void {
 
 		$data = [
-			'id'            => '789',  // string that looks like int.
-			'title'         => 9876,   // int that should be string.
-			'is_enabled'    => '1',    // string that should be cast to bool.
-			'is_open'       => 0,      // int that should be cast to bool.
-			'has_target'    => 'true', // string to bool.
+			'id' => '789', // string that looks like int.
+			'title' => 9_876, // int that should be string.
+			'is_enabled' => '1', // string that should be cast to bool.
+			'is_open' => 0, // int that should be cast to bool.
+			'has_target' => 'true', // string to bool.
 			'target_amount' => '3000', // string to int.
 		];
 
@@ -73,7 +73,7 @@ class CampaignDtoFactoryTest extends TestCase {
 		$this->assertTrue( $dto->is_enabled );
 		$this->assertFalse( $dto->is_open );
 		$this->assertTrue( $dto->has_target );
-		$this->assertSame( 3000, $dto->target_amount );
+		$this->assertSame( 3_000, $dto->target_amount );
 	}
 
 	#[Test]

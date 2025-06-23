@@ -24,25 +24,19 @@ final readonly class CampaignFactory {
 	 * @param CampaignDto $dto Campaign DTO.
 	 *
 	 * @return Campaign New Campaign entity.
-	 *
-	 * @throws InvalidEntityIdException       If the ID is invalid.
-	 * @throws InvalidCampaignTitleException  If the title is invalid.
-	 * @throws InvalidCampaignTargetException If the target data is invalid.
 	 */
 	public function create( CampaignDto $dto ): Campaign {
 
-		$id     = EntityId::create( $dto->id );
-		$title  = CampaignTitle::create( $dto->title );
+		$id = EntityId::create( $dto->id );
+		$title = CampaignTitle::create( $dto->title );
 		$target = CampaignTarget::create( $dto->has_target, $dto->target_amount );
 
-		$campaign = new Campaign(
+		return new Campaign(
 			id: $id,
 			title: $title,
 			is_enabled: $dto->is_enabled,
 			is_open: $dto->is_open,
 			target: $target,
 		);
-
-		return $campaign;
 	}
 }

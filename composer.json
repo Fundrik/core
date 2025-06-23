@@ -29,10 +29,11 @@
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-		"fundrik/coding-standards": "dev-main",
+		"fundrik/coding-standard": "dev-main",
 		"wp-coding-standards/wpcs": "^3.1",
 		"phpcompatibility/php-compatibility": "dev-develop as 9.4.0",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"slevomat/coding-standard": "^8.19",
 		"phpunit/phpunit": "^11.5",
 		"brain/monkey": "^2.6"
 	},

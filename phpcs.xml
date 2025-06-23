@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Fundrik Core" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+	<exclude-pattern>.phpunit.cache/</exclude-pattern>
 	<exclude-pattern>vendor/</exclude-pattern>
 
 	<arg value="sp"/>
@@ -10,28 +11,25 @@
 
 	<config name="testVersion" value="8.2-"/>
 
-	<rule ref="FundrikStandards"/>
+	<rule ref="FundrikStandard"/>
 
-	<rule ref="PHPCompatibilityWP"/>
-
-	<rule ref="WordPress">
-		<!-- PSR4 autoload -->
-	    <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
-		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
-		<!-- Allow Windows end of line -->
-		<exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
-		<!-- Allow short array syntax -->
-		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found"/>
-		<!-- Allow short ternary operator -->
-		<exclude name="Universal.Operators.DisallowShortTernary.Found"/>
-		<!-- Disable check for missing @package tag -->
-		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
-		<!-- Disable check for missing file comment -->
-		<exclude name="Squiz.Commenting.FileComment.Missing"/>
-		<!-- @see https://github.com/WordPress/wordpress-develop/pull/5136 -->
-		<exclude name="WordPress.Security.EscapeOutput.ExceptionNotEscaped"/>
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array">
+				<element key="src" value="Fundrik\Core"/>
+				<element key="tests" value="Fundrik\Core\Tests"/>
+			</property>
+		</properties>
 	</rule>
-	
+
+	<rule ref="FundrikStandard.Classes.FinalClassMustBeReadonly">
+		<properties>
+			<property name="excludedParentClasses" type="array">
+				<element value="\Throwable"/>
+			</property>
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
@@ -40,19 +38,31 @@
 		</properties>
 	</rule>
 
-	<rule ref="Squiz.Commenting.FileComment.Missing">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
-
 	<rule ref="Squiz.Commenting.ClassComment.Missing">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 
 	<rule ref="Squiz.Commenting.VariableComment.Missing">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 
 	<rule ref="Squiz.Commenting.FunctionComment.Missing">
-        <exclude-pattern>tests/*</exclude-pattern>
-    </rule>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="FundrikStandard.Classes.FinalClassMustBeReadonly">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="FundrikStandard.Commenting.SinceTagRequired">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 </ruleset>

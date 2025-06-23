@@ -34,14 +34,12 @@ final readonly class CampaignTitle {
 	 * @param string $value Title string.
 	 *
 	 * @return self New CampaignTitle instance.
-	 *
-	 * @throws InvalidCampaignTitleException If title is empty or whitespace.
 	 */
 	public static function create( string $value ): self {
 
 		$value = trim( $value );
 
-		if ( '' === $value ) {
+		if ( $value === '' ) {
 			throw new InvalidCampaignTitleException( 'Campaign title cannot be empty or whitespace.' );
 		}
 

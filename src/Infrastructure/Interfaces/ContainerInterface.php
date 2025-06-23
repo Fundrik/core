@@ -26,8 +26,6 @@ interface ContainerInterface {
 	 * @param string $id Fully qualified class or interface name.
 	 *
 	 * @return object Resolved instance.
-	 *
-	 * @throws RuntimeException If the identifier cannot be resolved.
 	 */
 	public function get( string $id ): object;
 
@@ -55,12 +53,12 @@ interface ContainerInterface {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string              $abstract Abstract identifier.
+	 * @param string $abstract Abstract identifier.
 	 * @param Closure|string|null $concrete Optional implementation or factory.
 	 */
 	public function singleton(
 		// phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.abstractFound
 		string $abstract,
-		Closure|string|null $concrete = null
+		Closure|string|null $concrete = null,
 	): void;
 }

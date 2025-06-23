@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass( TypeCaster::class )]
-class TypeCasterTest extends TestCase {
+final class TypeCasterTest extends TestCase {
 
 	#[Test]
 	public function it_casts_to_bool_correctly(): void {

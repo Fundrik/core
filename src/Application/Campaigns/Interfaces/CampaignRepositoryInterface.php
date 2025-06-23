@@ -33,7 +33,7 @@ interface CampaignRepositoryInterface {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return CampaignDto[] List of all campaign DTOs.
+	 * @return array<CampaignDto> List of all campaign DTOs.
 	 */
 	public function get_all(): array;
 

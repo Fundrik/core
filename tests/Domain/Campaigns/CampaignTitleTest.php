@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignTitle::class )]
-class CampaignTitleTest extends TestCase {
+final class CampaignTitleTest extends TestCase {
 
 	#[Test]
 	public function creates_with_valid_title(): void {

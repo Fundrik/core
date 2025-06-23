@@ -10,6 +10,8 @@
 
 	<config name="testVersion" value="8.2-"/>
 
+	<rule ref="FundrikStandards"/>
+
 	<rule ref="PHPCompatibilityWP"/>
 
 	<rule ref="WordPress">

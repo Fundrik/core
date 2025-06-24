@@ -61,4 +61,20 @@ interface ContainerInterface {
 		string $abstract,
 		Closure|string|null $concrete = null,
 	): void;
+
+	/**
+	 * Creates (makes) an instance of the given class or interface.
+	 *
+	 * Allows passing parameters to the constructor or factory.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $id Fully qualified class or interface name.
+	 * @param array<string, mixed> $parameters Optional parameters to pass during instantiation.
+	 *
+	 * @return object The created instance.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 */
+	public function make( string $id, array $parameters = [] ): object;
 }

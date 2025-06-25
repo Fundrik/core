@@ -25,7 +25,7 @@
 	<rule ref="FundrikStandard.Classes.FinalClassMustBeReadonly">
 		<properties>
 			<property name="excludedParentClasses" type="array">
-				<element value="\Throwable"/>
+				<element value="Throwable"/>
 			</property>
 		</properties>
 	</rule>
@@ -63,6 +63,22 @@
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.Functions.FunctionLength.FunctionLength">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Files.FileLength.FileTooLong">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	
+	<rule ref="SlevomatCodingStandard.Classes.ClassLength.ClassTooLong">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 </ruleset>

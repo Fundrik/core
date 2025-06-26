@@ -47,9 +47,7 @@ final readonly class CampaignService {
 
 		$campaign_dto = $this->repository->get_by_id( $id );
 
-		return $campaign_dto
-			? $this->factory->create( $campaign_dto )
-			: null;
+		return $campaign_dto !== null ? $this->factory->create( $campaign_dto ) : null;
 	}
 
 	/**

@@ -18,13 +18,13 @@ interface DependencyProviderInterface {
 	 * Returns an array of container bindings.
 	 *
 	 * Each binding maps an abstract identifier to a concrete implementation,
-	 * which can be a class name, a callable factory, or a nested group of bindings.
+	 * which can be a class name, closure or a nested group of bindings.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $category Optional category to filter bindings.
 	 *
-	 * @return array<string, string|callable|array<string, string|callable>> Bindings keyed by identifier.
+	 * @return array<string, array<string, string|Closure>>|array<string, Closure|string> Bindings keyed by identifier.
 	 */
 	public function get_bindings( string $category = '' ): array;
 }

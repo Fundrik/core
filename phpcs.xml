@@ -81,4 +81,12 @@
 	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
+
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingAnyTypeHint">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Files.LineLength.LineTooLong">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
 </ruleset>

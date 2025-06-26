@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Fundrik\Core\Application\Campaigns;
 
 use Fundrik\Core\Domain\Campaigns\Campaign;
-use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Support\TypedArrayExtractor;
 
 /**
  * Factory for creating CampaignDto objects from arrays or domain entities.
@@ -35,12 +35,12 @@ final readonly class CampaignDtoFactory {
 	public function from_array( array $data ): CampaignDto {
 
 		return new CampaignDto(
-			id: TypeCaster::to_id( $data['id'] ),
-			title: TypeCaster::to_string( $data['title'] ),
-			is_enabled: TypeCaster::to_bool( $data['is_enabled'] ),
-			is_open: TypeCaster::to_bool( $data['is_open'] ),
-			has_target: TypeCaster::to_bool( $data['has_target'] ),
-			target_amount: TypeCaster::to_int( $data['target_amount'] ),
+			id: TypedArrayExtractor::extract_id_required( $data, 'id' ),
+			title: TypedArrayExtractor::extract_string_required( $data, 'title' ),
+			is_enabled: TypedArrayExtractor::extract_bool_required( $data, 'is_enabled' ),
+			is_open: TypedArrayExtractor::extract_bool_required( $data, 'is_open' ),
+			has_target: TypedArrayExtractor::extract_bool_required( $data, 'has_target' ),
+			target_amount: TypedArrayExtractor::extract_int_required( $data, 'target_amount' ),
 		);
 	}
 

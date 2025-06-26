@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain\Exceptions;
 
-use InvalidArgumentException;
+use DomainException;
 
 // phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
@@ -14,5 +14,5 @@ use InvalidArgumentException;
  *
  * @since 1.0.0
  */
-final class InvalidEntityIdException extends InvalidArgumentException {}
+final class InvalidEntityIdException extends DomainException {}
 // phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

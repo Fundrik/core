@@ -30,6 +30,22 @@ interface ContainerInterface {
 	public function get( string $id ): object;
 
 	/**
+	 * Creates (makes) an instance of the given class or interface.
+	 *
+	 * Allows passing parameters to the constructor.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $id Class or interface name.
+	 * @param array<string, mixed> $parameters Optional parameters to pass during instantiation.
+	 *
+	 * @return object The created instance.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 */
+	public function make( string $id, array $parameters = [] ): object;
+
+	/**
 	 * Checks if the container has a binding for the given identifier.
 	 *
 	 * Does not guarantee the binding is instantiable, only that it exists.
@@ -61,20 +77,4 @@ interface ContainerInterface {
 		string $abstract,
 		Closure|string|null $concrete = null,
 	): void;
-
-	/**
-	 * Creates (makes) an instance of the given class or interface.
-	 *
-	 * Allows passing parameters to the constructor or factory.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $id Fully qualified class or interface name.
-	 * @param array<string, mixed> $parameters Optional parameters to pass during instantiation.
-	 *
-	 * @return object The created instance.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
-	 */
-	public function make( string $id, array $parameters = [] ): object;
 }

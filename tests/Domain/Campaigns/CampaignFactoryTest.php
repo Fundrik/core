@@ -102,7 +102,7 @@ final class CampaignFactoryTest extends TestCase {
 	public function throws_when_entity_id_is_invalid(): void {
 
 		$this->expectException( InvalidEntityIdException::class );
-		$this->expectExceptionMessage( 'EntityId must be a positive, given: -1' );
+		$this->expectExceptionMessage( 'EntityId must be a positive integer, given: -1' );
 
 		$this->factory->create(
 			new CampaignDto(

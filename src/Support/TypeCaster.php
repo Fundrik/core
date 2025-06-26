@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Support;
 
+use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
+use InvalidArgumentException;
+use Stringable;
+use TypeError;
+
 /**
- * Utility class for safe and consistent type conversion across application layers.
+ * Utility class for safe and consistent type conversion.
  *
- * Facilitates mapping of raw infrastructure data to strongly typed domain values.
- * Supports conversion to boolean, integer, string, and ID (int or UUID-like string).
+ * Throws exceptions on invalid input instead of silently failing.
  *
  * @since 1.0.0
  */
 final readonly class TypeCaster {
 
 	/**
-	 * Converts a value to boolean.
+	 * Converts the given value to a boolean.
 	 *
-	 * Uses PHP's filter_var with FILTER_VALIDATE_BOOLEAN to interpret common boolean representations.
+	 * Throws if the value cannot be interpreted as a boolean.
+	 * Strictly disallows null and empty string.
 	 *
 	 * @since 1.0.0
 	 *
@@ -29,13 +35,27 @@ final readonly class TypeCaster {
 	 */
 	public static function to_bool( mixed $value ): bool {
 
-		return filter_var( $value, FILTER_VALIDATE_BOOLEAN );
+		if ( $value === null || $value === '' ) {
+			throw new InvalidArgumentException(
+				sprintf( 'Cannot cast null or empty string to bool' ),
+			);
+		}
+
+		$result = filter_var( $value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+
+		if ( $result === null ) {
+			throw new InvalidArgumentException(
+				sprintf( 'Cannot cast value of type %s to bool', get_debug_type( $value ) ),
+			);
+		}
+
+		return $result;
 	}
 
 	/**
-	 * Converts a value to integer.
+	 * Converts the given value to an integer.
 	 *
-	 * Casts value using (int) operator.
+	 * Throws if the value is boolean or not numeric.
 	 *
 	 * @since 1.0.0
 	 *
@@ -47,13 +67,22 @@ final readonly class TypeCaster {
 	 */
 	public static function to_int( mixed $value ): int {
 
+		if ( is_bool( $value ) || ! is_numeric( $value ) ) {
+			throw new InvalidArgumentException(
+				sprintf( 'Cannot cast value of type %s to int', get_debug_type( $value ) ),
+			);
+		}
+
 		return (int) $value;
 	}
 
 	/**
-	 * Converts a value to string.
+	 * Converts the given value to a string.
 	 *
-	 * Casts value to string and trims whitespace.
+	 * Throws if the value is boolean,
+	 * or if not scalar and not stringable.
+	 *
+	 * Empty string is allowed.
 	 *
 	 * @since 1.0.0
 	 *
@@ -65,31 +94,73 @@ final readonly class TypeCaster {
 	 */
 	public static function to_string( mixed $value ): string {
 
-		return trim( (string) $value );
+		if ( is_bool( $value ) ) {
+			throw new InvalidArgumentException(
+				sprintf( 'Cannot cast bool to string' ),
+			);
+		}
+
+		if ( is_int( $value ) || is_float( $value ) ) {
+			throw new InvalidArgumentException(
+				sprintf( 'Cannot cast numeric to string' ),
+			);
+		}
+
+		if ( is_string( $value ) || self::is_stringable_object( $value ) ) {
+			// phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable, Generic.Commenting.DocComment.MissingShort
+			/** @var string|Stringable $value */
+			return trim( (string) $value );
+		}
+
+		throw new InvalidArgumentException(
+			sprintf( 'Cannot cast value of type %s to string', get_debug_type( $value ) ),
+		);
 	}
 
 	/**
-	 * Converts a value to an ID representation.
+	 * Converts the given value to a valid entity ID (int or UUID string).
 	 *
-	 * Returns an integer if the value is a valid integer string,
-	 * otherwise returns a trimmed string (e.g., UUID).
+	 * Internally validates using the EntityId value object.
+	 * Throws if the value is not a valid ID format.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param mixed $value Input value.
 	 *
-	 * @return int|string Integer ID or string identifier.
+	 * @return int|string A validated ID.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_id( mixed $value ): int|string {
 
-		$int_value = filter_var( $value, FILTER_VALIDATE_INT );
-
-		if ( $int_value !== false ) {
-			return $int_value;
+		try {
+			// phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable, Generic.Commenting.DocComment.MissingShort
+			/** @var int|string $value */
+			$entity_id = EntityId::create( $value );
+			return $entity_id->value;
+		} catch ( InvalidEntityIdException | TypeError $e ) {
+			throw new InvalidArgumentException(
+				sprintf( 'Cannot cast value to valid entity ID: %s', $e->getMessage() ),
+				previous: $e,
+			);
 		}
+	}
 
-		return self::to_string( $value );
+	/**
+	 * Checks if a value is an object that can be cast to string.
+	 *
+	 * In PHP 8+, all objects with __toString() implicitly implement Stringable.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $value Input value.
+	 *
+	 * @return bool True if the object implements Stringable, false otherwise.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 */
+	private static function is_stringable_object( mixed $value ): bool {
+
+		return $value instanceof Stringable;
 	}
 }

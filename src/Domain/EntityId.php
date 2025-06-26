@@ -6,6 +6,7 @@ namespace Fundrik\Core\Domain;
 
 use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
 use Fundrik\Core\Support\TypeCaster;
+use InvalidArgumentException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 
@@ -41,17 +42,26 @@ final readonly class EntityId {
 	 */
 	public static function create( int|string $value ): self {
 
-		if ( is_int( $value ) ) {
-			return self::from_int( $value );
-		}
+		try {
+			// First, try to cast the value to an integer and create EntityId from int.
+			$int_value = TypeCaster::to_int( $value );
+			return self::from_int( $int_value );
+		} catch ( InvalidArgumentException ) {
 
-		if ( is_string( $value ) ) {
-			return self::from_uuid( $value );
+			// If casting to int fails, try casting to string and treat it as UUID.
+			try {
+				$string_value = TypeCaster::to_string( $value );
+				return self::from_uuid( $string_value );
+			} catch ( InvalidArgumentException | InvalidEntityIdException $e2 ) {
+				// If any error occurs while casting to string or creating UUID,
+				// wrap and rethrow as InvalidEntityIdException to normalize exceptions.
+				throw new InvalidEntityIdException( $e2->getMessage(), previous: $e2 );
+			}
+		} catch ( InvalidEntityIdException $e ) {
+			// If from_int() throws InvalidEntityIdException (e.g. negative int),
+			// just rethrow it directly.
+			throw $e;
 		}
-
-		// @codeCoverageIgnoreStart
-		throw new InvalidEntityIdException( 'EntityId must be int or UUID string' );
-		// @codeCoverageIgnoreEnd
 	}
 
 	/**
@@ -66,7 +76,7 @@ final readonly class EntityId {
 	private static function from_int( int $value ): self {
 
 		if ( $value <= 0 ) {
-			throw new InvalidEntityIdException( "EntityId must be a positive, given: {$value}" );
+			throw new InvalidEntityIdException( "EntityId must be a positive integer, given: {$value}" );
 		}
 
 		return new self( $value );

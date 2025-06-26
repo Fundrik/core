@@ -10,8 +10,9 @@ use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
 use Fundrik\Core\Domain\EntityId;
-use Fundrik\Core\Support\TypeCaster;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,6 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( EntityId::class )]
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
-#[UsesClass( TypeCaster::class )]
 final class CampaignDtoFactoryTest extends TestCase {
 
 	private CampaignDtoFactory $dto_factory;
@@ -59,7 +59,7 @@ final class CampaignDtoFactoryTest extends TestCase {
 
 		$data = [
 			'id' => '789', // string that looks like int.
-			'title' => 9_876, // int that should be string.
+			'title' => '876', // string that looks like int.
 			'is_enabled' => '1', // string that should be cast to bool.
 			'is_open' => 0, // int that should be cast to bool.
 			'has_target' => 'true', // string to bool.
@@ -69,11 +69,21 @@ final class CampaignDtoFactoryTest extends TestCase {
 		$dto = $this->dto_factory->from_array( $data );
 
 		$this->assertSame( 789, $dto->id );
-		$this->assertSame( '9876', $dto->title );
+		$this->assertSame( '876', $dto->title );
 		$this->assertTrue( $dto->is_enabled );
 		$this->assertFalse( $dto->is_open );
 		$this->assertTrue( $dto->has_target );
 		$this->assertSame( 3_000, $dto->target_amount );
+	}
+
+	#[Test]
+	#[DataProvider( 'invalid_data_provider' )]
+	public function from_array_throws_on_invalid_data( array $invalid_data, string $expected_message ): void {
+
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( $expected_message );
+
+		$this->dto_factory->from_array( $invalid_data );
 	}
 
 	#[Test]
@@ -96,5 +106,55 @@ final class CampaignDtoFactoryTest extends TestCase {
 		$this->assertTrue( $dto->is_open );
 		$this->assertFalse( $dto->has_target );
 		$this->assertEquals( 0, $dto->target_amount );
+	}
+
+	public static function invalid_data_provider(): array {
+
+		return [
+			[
+				'invalid_data' => [
+					'id' => 'invalid_uuid',
+					'title' => 'Valid Title',
+					'is_enabled' => true,
+					'is_open' => true,
+					'has_target' => true,
+					'target_amount' => 100,
+				],
+				'expected_message' => 'Cannot cast value to valid entity ID: EntityId must be a valid UUID, given: invalid_uuid',
+			],
+			[
+				'invalid_data' => [
+					'id' => 123,
+					'title' => false,
+					'is_enabled' => true,
+					'is_open' => true,
+					'has_target' => true,
+					'target_amount' => 100,
+				],
+				'expected_message' => "Missing or invalid required string key 'title'",
+			],
+			[
+				'invalid_data' => [
+					'id' => 123,
+					'title' => 'Valid',
+					'is_enabled' => 'not_bool',
+					'is_open' => true,
+					'has_target' => true,
+					'target_amount' => 100,
+				],
+				'expected_message' => "Missing or invalid required boolean key 'is_enabled'",
+			],
+			[
+				'invalid_data' => [
+					'id' => 123,
+					'title' => 'Valid',
+					'is_enabled' => true,
+					'is_open' => true,
+					'has_target' => true,
+					'target_amount' => 'NaN',
+				],
+				'expected_message' => "Missing or invalid required integer key 'target_amount'",
+			],
+		];
 	}
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Support;
 
+use InvalidArgumentException;
+
 /**
  * Helper class for safely extracting typed values from associative arrays
  * with options to return default values or null when keys are missing.
@@ -20,75 +22,99 @@ final readonly class TypedArrayExtractor {
 	/**
 	 * Extracts a boolean value from the given array by key.
 	 *
-	 * If the key exists, casts the value to bool using TypeCaster.
-	 * If the key is missing or value is null, returns null.
+	 * If the key exists, attempts to cast the value to bool using TypeCaster.
+	 * If the key is missing, or the value is null or invalid, returns null.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return bool|null The boolean value, or null if key not present.
+	 * @return bool|null The boolean value, or null if key is missing or value invalid.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
 	public static function extract_bool_or_null( array $data, string $key ): ?bool {
 
-		return array_key_exists( $key, $data ) ? TypeCaster::to_bool( $data[ $key ] ) : null;
+		if ( ! array_key_exists( $key, $data ) ) {
+			return null;
+		}
+
+		try {
+			return TypeCaster::to_bool( $data[ $key ] );
+		} catch ( InvalidArgumentException ) {
+			return null;
+		}
 	}
 
 	/**
 	 * Extracts an integer value from the given array by key.
 	 *
-	 * If the key exists, casts the value to int using TypeCaster.
-	 * If the key is missing or value is null, returns null.
+	 * If the key exists, attempts to cast the value to int using TypeCaster.
+	 * If the key is missing, or the value is null or invalid, returns null.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return int|null The integer value, or null if key not present.
+	 * @return int|null The integer value, or null if key is missing or value invalid.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
 	public static function extract_int_or_null( array $data, string $key ): ?int {
 
-		return array_key_exists( $key, $data ) ? TypeCaster::to_int( $data[ $key ] ) : null;
+		if ( ! array_key_exists( $key, $data ) ) {
+			return null;
+		}
+
+		try {
+			return TypeCaster::to_int( $data[ $key ] );
+		} catch ( InvalidArgumentException ) {
+			return null;
+		}
 	}
 
 	/**
 	 * Extracts a string value from the given array by key.
 	 *
-	 * If the key exists, casts the value to string using TypeCaster.
-	 * If the key is missing, returns null.
+	 * If the key exists, attempts to cast the value to string using TypeCaster.
+	 * If the key is missing, or the value is null or invalid, returns null.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return string|null The string value, or null if key is not present.
+	 * @return string|null The string value, or null if key is missing or value invalid.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
 	public static function extract_string_or_null( array $data, string $key ): ?string {
 
-		return array_key_exists( $key, $data ) ? TypeCaster::to_string( $data[ $key ] ) : null;
+		if ( ! array_key_exists( $key, $data ) ) {
+			return null;
+		}
+
+		try {
+			return TypeCaster::to_string( $data[ $key ] );
+		} catch ( InvalidArgumentException ) {
+			return null;
+		}
 	}
 
 	/**
 	 * Extracts an array value from the given array by key.
 	 *
 	 * If the key exists and the value is an array, returns it.
-	 * Otherwise, returns null.
+	 * Otherwise, returns null (either key missing or value not an array).
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return array<mixed>|null The array value, or null if key is not present or value is not an array.
+	 * @return array<mixed>|null The array value, or null if key is missing or value is not an array.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
@@ -100,80 +126,123 @@ final readonly class TypedArrayExtractor {
 	/**
 	 * Extracts a boolean value from the given array by key.
 	 *
-	 * If the key exists, casts the value to bool using TypeCaster.
-	 * If the key is missing or value is null, returns false.
+	 * Throws an exception if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return bool The boolean value, or false if key not present.
+	 * @return bool The boolean value.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
-	public static function extract_bool_or_false( array $data, string $key ): bool {
+	public static function extract_bool_required( array $data, string $key ): bool {
 
-		return self::extract_bool_or_null( $data, $key ) ?? false;
+		$value = self::extract_bool_or_null( $data, $key );
+
+		if ( $value === null ) {
+			throw new InvalidArgumentException( "Missing or invalid required boolean key '{$key}'" );
+		}
+
+		return $value;
 	}
 
 	/**
 	 * Extracts an integer value from the given array by key.
 	 *
-	 * If the key exists, casts the value to int using TypeCaster.
-	 * If the key is missing or value is null, returns 0.
+	 * Throws an exception if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return int The integer value, or 0 if key not present.
+	 * @return int The integer value.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
-	public static function extract_int_or_zero( array $data, string $key ): int {
+	public static function extract_int_required( array $data, string $key ): int {
 
-		return self::extract_int_or_null( $data, $key ) ?? 0;
+		$value = self::extract_int_or_null( $data, $key );
+
+		if ( $value === null ) {
+			throw new InvalidArgumentException( "Missing or invalid required integer key '{$key}'" );
+		}
+
+		return $value;
 	}
 
 	/**
 	 * Extracts a string value from the given array by key.
 	 *
-	 * If the key exists, casts the value to string using TypeCaster.
-	 * If the key is missing, returns an empty string.
+	 * Throws an exception if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return string The string value, or empty string if key is not present.
+	 * @return string The string value.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
-	public static function extract_string_or_empty( array $data, string $key ): string {
+	public static function extract_string_required( array $data, string $key ): string {
 
-		return self::extract_string_or_null( $data, $key ) ?? '';
+		$value = self::extract_string_or_null( $data, $key );
+
+		if ( $value === null ) {
+			throw new InvalidArgumentException( "Missing or invalid required string key '{$key}'" );
+		}
+
+		return $value;
 	}
 
 	/**
 	 * Extracts an array value from the given array by key.
 	 *
-	 * If the key exists and the value is an array, returns it.
-	 * Otherwise, returns an empty array.
+	 * Throws an exception if the key is missing or the value is not an array.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, mixed> $data The source array.
+	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return array<mixed> The array value, or an empty array if key is not present or value is not an array.
+	 * @return array<mixed> The array value.
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
 	 */
-	public static function extract_array_or_empty( array $data, string $key ): array {
+	public static function extract_array_required( array $data, string $key ): array {
 
-		return self::extract_array_or_null( $data, $key ) ?? [];
+		$value = self::extract_array_or_null( $data, $key );
+
+		if ( $value === null ) {
+			throw new InvalidArgumentException( "Missing or invalid required array key '{$key}'" );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Extracts an ID value from the given array by key.
+	 *
+	 * Throws an exception if the key is missing or the value is not a valid entity ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array<mixed> $data The source array.
+	 * @param string $key The key to look up.
+	 *
+	 * @return int|string The validated entity ID.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint
+	 */
+	public static function extract_id_required( array $data, string $key ): int|string {
+
+		if ( ! array_key_exists( $key, $data ) ) {
+			throw new InvalidArgumentException( "Missing required ID key '{$key}'" );
+		}
+
+		return TypeCaster::to_id( $data[ $key ] );
 	}
 }

@@ -28,7 +28,7 @@ final class EntityIdTest extends TestCase {
 	public function throws_when_negative_int_provided(): void {
 
 		$this->expectException( InvalidEntityIdException::class );
-		$this->expectExceptionMessage( 'EntityId must be a positive, given: -123' );
+		$this->expectExceptionMessage( 'EntityId must be a positive integer, given: -123' );
 
 		EntityId::create( -123 );
 	}
@@ -37,7 +37,7 @@ final class EntityIdTest extends TestCase {
 	public function throws_when_zero_provided(): void {
 
 		$this->expectException( InvalidEntityIdException::class );
-		$this->expectExceptionMessage( 'EntityId must be a positive, given: 0' );
+		$this->expectExceptionMessage( 'EntityId must be a positive integer, given: 0' );
 
 		EntityId::create( 0 );
 	}

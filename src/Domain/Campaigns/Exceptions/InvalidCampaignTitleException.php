@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain\Campaigns\Exceptions;
 
-use DomainException;
-
 // phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Exception thrown when a campaign title is invalid.
@@ -14,5 +12,5 @@ use DomainException;
  *
  * @since 1.0.0
  */
-final class InvalidCampaignTitleException extends DomainException {}
+final class InvalidCampaignTitleException extends CampaignDomainException {}
 // phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

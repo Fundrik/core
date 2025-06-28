@@ -2,15 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Fundrik\Core\Domain\Exceptions;
+namespace Fundrik\Core\Domain\Campaigns\Exceptions;
+
+use Fundrik\Core\Domain\Exceptions\FundrikDomainException;
 
 // phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
- * Exception thrown when an entity ID is invalid.
+ * Base exception class for all domain-specific errors related to Campaign entities.
  *
- * Typically thrown by EntityId::create when the ID is not a non-empty int or non-empty string.
+ * This exception serves as a common ancestor for more specific Campaign-related exceptions,
+ * allowing callers to catch all campaign domain errors in a single catch block if needed.
  *
  * @since 1.0.0
  */
-final class InvalidEntityIdException extends FundrikDomainException {}
+abstract class CampaignDomainException extends FundrikDomainException {}
 // phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

@@ -36,17 +36,13 @@ final readonly class TypeCaster {
 	public static function to_bool( mixed $value ): bool {
 
 		if ( $value === null || $value === '' ) {
-			throw new InvalidArgumentException(
-				sprintf( 'Cannot cast null or empty string to bool' ),
-			);
+			self::throw_invalid_cast_exception( 'bool', $value, 'null or empty string' );
 		}
 
 		$result = filter_var( $value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
 
 		if ( $result === null ) {
-			throw new InvalidArgumentException(
-				sprintf( 'Cannot cast value of type %s to bool', get_debug_type( $value ) ),
-			);
+			self::throw_invalid_cast_exception( 'bool', $value );
 		}
 
 		return $result;
@@ -68,19 +64,46 @@ final readonly class TypeCaster {
 	public static function to_int( mixed $value ): int {
 
 		if ( is_bool( $value ) || ! is_numeric( $value ) ) {
-			throw new InvalidArgumentException(
-				sprintf( 'Cannot cast value of type %s to int', get_debug_type( $value ) ),
-			);
+			self::throw_invalid_cast_exception( 'int', $value );
+		}
+
+		if ( is_float( $value ) ) {
+			self::throw_invalid_cast_exception( 'int', $value );
+		}
+
+		if ( is_string( $value ) && str_contains( $value, '.' ) ) {
+			self::throw_invalid_cast_exception( 'int', $value, 'float-like string' );
 		}
 
 		return (int) $value;
 	}
 
 	/**
+	 * Converts the given value to a float.
+	 *
+	 * Throws if the value is boolean or not numeric.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $value Input value.
+	 *
+	 * @return float Converted float.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 */
+	public static function to_float( mixed $value ): float {
+
+		if ( is_bool( $value ) || ! is_numeric( $value ) ) {
+			self::throw_invalid_cast_exception( 'float', $value );
+		}
+
+		return (float) $value;
+	}
+
+	/**
 	 * Converts the given value to a string.
 	 *
-	 * Throws if the value is boolean,
-	 * or if not scalar and not stringable.
+	 * Throws if the value not scalar and not stringable.
 	 *
 	 * Empty string is allowed.
 	 *
@@ -95,26 +118,66 @@ final readonly class TypeCaster {
 	public static function to_string( mixed $value ): string {
 
 		if ( is_bool( $value ) ) {
-			throw new InvalidArgumentException(
-				sprintf( 'Cannot cast bool to string' ),
-			);
+			self::throw_invalid_cast_exception( 'string', $value );
 		}
 
 		if ( is_int( $value ) || is_float( $value ) ) {
-			throw new InvalidArgumentException(
-				sprintf( 'Cannot cast numeric to string' ),
-			);
+			self::throw_invalid_cast_exception( 'string', $value, 'numeric' );
 		}
 
-		if ( is_string( $value ) || self::is_stringable_object( $value ) ) {
-			// phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable, Generic.Commenting.DocComment.MissingShort
-			/** @var string|Stringable $value */
-			return trim( (string) $value );
+		if ( ! is_string( $value ) && ! self::is_stringable_object( $value ) ) {
+			self::throw_invalid_cast_exception( 'string', $value );
 		}
 
-		throw new InvalidArgumentException(
-			sprintf( 'Cannot cast value of type %s to string', get_debug_type( $value ) ),
-		);
+		// phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable, Generic.Commenting.DocComment.MissingShort
+		/** @var string|Stringable $value */
+		return trim( (string) $value );
+	}
+
+	/**
+	 * Attempts to convert the given value to a scalar type (bool, int, float, or string).
+	 *
+	 * Throws if the value not scalar.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $value Input value to convert.
+	 *
+	 * @return bool|int|float|string The converted scalar value.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 */
+	public static function to_scalar( mixed $value ): bool|int|float|string {
+
+		// phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+
+		try {
+			return self::to_bool( $value );
+		} catch ( InvalidArgumentException ) {
+			// not bool.
+		}
+
+		try {
+			return self::to_int( $value );
+		} catch ( InvalidArgumentException ) {
+			// not int.
+		}
+
+		try {
+			return self::to_float( $value );
+		} catch ( InvalidArgumentException ) {
+			// not float.
+		}
+
+		try {
+			return self::to_string( $value );
+		} catch ( InvalidArgumentException ) {
+			// not string.
+		}
+
+		// phpcs:enable Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+
+		self::throw_invalid_cast_exception( 'scalar', $value );
 	}
 
 	/**
@@ -162,5 +225,35 @@ final readonly class TypeCaster {
 	private static function is_stringable_object( mixed $value ): bool {
 
 		return $value instanceof Stringable;
+	}
+
+	/**
+	 * Throws an InvalidArgumentException for an invalid type cast.
+	 *
+	 * Generates a consistent exception message indicating the source and target types.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $target_type The desired target type (e.g., 'int', 'bool', 'string').
+	 * @param mixed $value The original value that failed casting.
+	 * @param string|null $source_type Optional override for source type description; if null, determined from $value.
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 */
+	private static function throw_invalid_cast_exception(
+		string $target_type,
+		mixed $value,
+		?string $source_type = null,
+	): never {
+
+		$source_type ??= get_debug_type( $value );
+
+		throw new InvalidArgumentException(
+			sprintf(
+				'Cannot cast %s to %s',
+				$source_type,
+				$target_type,
+			),
+		);
 	}
 }

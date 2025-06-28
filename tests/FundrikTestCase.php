@@ -8,6 +8,7 @@ use Brain\Monkey;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
+// phpcs:ignore FundrikStandard.Classes.AbstractClassMustBeReadonly.AbstractClassNotReadonly
 abstract class FundrikTestCase extends PHPUnitTestCase {
 
 	use MockeryPHPUnitIntegration;

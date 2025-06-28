@@ -6,12 +6,12 @@ namespace Fundrik\Core\Tests\Domain\Campaigns;
 
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
+use Fundrik\Core\Tests\FundrikTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignTarget::class )]
-final class CampaignTargetTest extends TestCase {
+final class CampaignTargetTest extends FundrikTestCase {
 
 	#[Test]
 	public function creates_when_enabled_target_with_amount(): void {

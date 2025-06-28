@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Infrastructure\Interfaces;
 
+// phpcs:ignore SlevomatCodingStandard.Namespaces.UnusedUses.UnusedUse
+use Closure;
+
 /**
  * Interface for providing service bindings to the dependency container.
  *

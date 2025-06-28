@@ -12,12 +12,13 @@ use Fundrik\Core\Domain\Campaigns\CampaignFactory;
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
 use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Tests\FundrikTestCase;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignService::class )]
 #[UsesClass( Campaign::class )]
@@ -25,7 +26,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignFactory::class )]
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
-final class CampaignServiceTest extends TestCase {
+#[UsesClass( TypeCaster::class )]
+final class CampaignServiceTest extends FundrikTestCase {
 
 	private CampaignRepositoryInterface&MockInterface $repository;
 

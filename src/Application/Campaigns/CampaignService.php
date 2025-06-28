@@ -12,9 +12,6 @@ use Fundrik\Core\Domain\EntityId;
 /**
  * Application service for use cases involving Campaign domain entities.
  *
- * Coordinates domain logic, DTOs, and persistence.
- * Handles orchestration of campaign-related operations.
- *
  * @since 1.0.0
  */
 final readonly class CampaignService {

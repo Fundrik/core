@@ -6,23 +6,27 @@ namespace Fundrik\Core\Tests\Application\Campaigns;
 
 use Fundrik\Core\Application\Campaigns\CampaignDto;
 use Fundrik\Core\Application\Campaigns\CampaignDtoFactory;
+use Fundrik\Core\Application\Campaigns\Exceptions\InvalidCampaignDtoInputException;
 use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
 use Fundrik\Core\Domain\EntityId;
-use InvalidArgumentException;
+use Fundrik\Core\Support\ArrayExtractor;
+use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Tests\FundrikTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignDtoFactory::class )]
 #[UsesClass( Campaign::class )]
 #[UsesClass( EntityId::class )]
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
-final class CampaignDtoFactoryTest extends TestCase {
+#[UsesClass( ArrayExtractor::class )]
+#[UsesClass( TypeCaster::class )]
+final class CampaignDtoFactoryTest extends FundrikTestCase {
 
 	private CampaignDtoFactory $dto_factory;
 
@@ -80,8 +84,11 @@ final class CampaignDtoFactoryTest extends TestCase {
 	#[DataProvider( 'invalid_data_provider' )]
 	public function from_array_throws_on_invalid_data( array $invalid_data, string $expected_message ): void {
 
-		$this->expectException( InvalidArgumentException::class );
-		$this->expectExceptionMessage( $expected_message );
+		$this->expectException( InvalidCampaignDtoInputException::class );
+
+		$this->expectExceptionMessageMatches(
+			'/Failed to create CampaignDto from array: ' . preg_quote( $expected_message, '/' ) . '/',
+		);
 
 		$this->dto_factory->from_array( $invalid_data );
 	}
@@ -120,7 +127,7 @@ final class CampaignDtoFactoryTest extends TestCase {
 					'has_target' => true,
 					'target_amount' => 100,
 				],
-				'expected_message' => 'Cannot cast value to valid entity ID: EntityId must be a valid UUID, given: invalid_uuid',
+				'expected_message' => "Invalid value type at key 'id' (expected entity ID): Cannot cast value to valid entity ID: EntityId must be a valid UUID, given: invalid_uuid",
 			],
 			[
 				'invalid_data' => [
@@ -131,7 +138,7 @@ final class CampaignDtoFactoryTest extends TestCase {
 					'has_target' => true,
 					'target_amount' => 100,
 				],
-				'expected_message' => "Missing or invalid required string key 'title'",
+				'expected_message' => "Invalid value type at key 'title' (expected string): Cannot cast bool to string",
 			],
 			[
 				'invalid_data' => [
@@ -142,7 +149,7 @@ final class CampaignDtoFactoryTest extends TestCase {
 					'has_target' => true,
 					'target_amount' => 100,
 				],
-				'expected_message' => "Missing or invalid required boolean key 'is_enabled'",
+				'expected_message' => "Invalid value type at key 'is_enabled' (expected bool): Cannot cast string to bool",
 			],
 			[
 				'invalid_data' => [
@@ -153,7 +160,7 @@ final class CampaignDtoFactoryTest extends TestCase {
 					'has_target' => true,
 					'target_amount' => 'NaN',
 				],
-				'expected_message' => "Missing or invalid required integer key 'target_amount'",
+				'expected_message' => "Invalid value type at key 'target_amount' (expected int): Cannot cast string to int",
 			],
 		];
 	}

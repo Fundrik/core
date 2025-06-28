@@ -7,14 +7,14 @@ namespace Fundrik\Core\Tests\Domain;
 use Fundrik\Core\Domain\EntityId;
 use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
 use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Tests\FundrikTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( EntityId::class )]
 #[UsesClass( TypeCaster::class )]
-final class EntityIdTest extends TestCase {
+final class EntityIdTest extends FundrikTestCase {
 
 	#[Test]
 	public function creates_from_positive_int(): void {

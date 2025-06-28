@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Tests\Support;
 
+use Fundrik\Core\Domain\EntityId;
 use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Tests\FundrikTestCase;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\UsesClass;
 use stdClass;
 
 #[CoversClass( TypeCaster::class )]
-final class TypeCasterTest extends TestCase {
+#[UsesClass( EntityId::class )]
+final class TypeCasterTest extends FundrikTestCase {
 
 	#[Test]
 	#[DataProvider( 'provide_values_for_to_bool' )]
@@ -21,19 +24,22 @@ final class TypeCasterTest extends TestCase {
 		mixed $value,
 		?bool $expected,
 		bool $should_throw,
-		?string $expected_message = null,
+		?string $expected_source_type = null,
+		?string $expected_target_type = null,
 	): void {
 
 		if ( $should_throw ) {
 			$this->expectException( InvalidArgumentException::class );
 
-			if ( $expected_message !== null ) {
+			if ( $expected_source_type !== null && $expected_target_type !== null ) {
 
 				if ( is_resource( $value ) ) {
-					$pattern = '/' . preg_quote( 'Cannot cast value of type resource', '/' ) . '/';
+					$pattern = '/Cannot cast resource(?: \([a-z]+\))? to bool/';
 					$this->expectExceptionMessageMatches( $pattern );
 				} else {
-					$this->expectExceptionMessage( $expected_message );
+					$this->expectExceptionMessage(
+						self::formatInvalidCastMessage( $expected_source_type, $expected_target_type ),
+					);
 				}
 			}
 		}
@@ -49,21 +55,21 @@ final class TypeCasterTest extends TestCase {
 			[ false, false, false ],
 			[ 1, true, false ],
 			[ 0, false, false ],
-			[ -1, null, true, 'Cannot cast value of type int to bool' ],
-			[ 200, null, true, 'Cannot cast value of type int to bool' ],
-			[ -0.99, null, true, 'Cannot cast value of type float to bool' ],
+			[ -1, null, true, 'int', 'bool' ],
+			[ 200, null, true, 'int', 'bool' ],
+			[ -0.99, null, true, 'float', 'bool' ],
 			[ 'true', true, false ],
 			[ 'false', false, false ],
 			[ 'yes', true, false ],
 			[ 'no', false, false ],
 			[ '1', true, false ],
 			[ '0', false, false ],
-			[ '00123', null, true, 'Cannot cast value of type string to bool' ],
-			[ 'abc', null, true, 'Cannot cast value of type string to bool' ],
-			[ '', null, true, 'Cannot cast null or empty string to bool' ],
-			[ null, null, true, 'Cannot cast null or empty string to bool' ],
-			[ [], null, true, 'Cannot cast value of type array to bool' ],
-			[ [ 'some' => 'value' ], null, true, 'Cannot cast value of type array to bool' ],
+			[ '00123', null, true, 'string', 'bool' ],
+			[ 'abc', null, true, 'string', 'bool' ],
+			[ '', null, true, 'null or empty string', 'bool' ],
+			[ null, null, true, 'null or empty string', 'bool' ],
+			[ [], null, true, 'array', 'bool' ],
+			[ [ 'some' => 'value' ], null, true, 'array', 'bool' ],
 			[
 				new class() {
 
@@ -74,11 +80,12 @@ final class TypeCasterTest extends TestCase {
 				},
 				null,
 				true,
-				'Cannot cast value of type class@anonymous to bool',
+				'class@anonymous',
+				'bool',
 			],
-			[ new stdClass(), null, true, 'Cannot cast value of type stdClass to bool' ],
+			[ new stdClass(), null, true, 'stdClass', 'bool' ],
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-			[ fopen( 'php://memory', 'r' ), null, true, 'Cannot cast value of type resource to bool' ],
+			[ fopen( 'php://memory', 'r' ), null, true, 'resource', 'bool' ],
 		];
 	}
 
@@ -88,19 +95,22 @@ final class TypeCasterTest extends TestCase {
 		mixed $value,
 		?int $expected,
 		bool $should_throw,
-		?string $expected_message = null,
+		?string $expected_source_type = null,
+		?string $expected_target_type = null,
 	): void {
 
 		if ( $should_throw ) {
 			$this->expectException( InvalidArgumentException::class );
 
-			if ( $expected_message !== null ) {
+			if ( $expected_source_type !== null && $expected_target_type !== null ) {
 
 				if ( is_resource( $value ) ) {
-					$pattern = '/' . preg_quote( 'Cannot cast value of type resource', '/' ) . '/';
+					$pattern = '/Cannot cast resource(?: \([a-z]+\))? to int/';
 					$this->expectExceptionMessageMatches( $pattern );
 				} else {
-					$this->expectExceptionMessage( $expected_message );
+					$this->expectExceptionMessage(
+						self::formatInvalidCastMessage( $expected_source_type, $expected_target_type ),
+					);
 				}
 			}
 		}
@@ -113,17 +123,19 @@ final class TypeCasterTest extends TestCase {
 
 		return [
 			[ '123', 123, false ],
-			[ '5.99', 5, false ],
-			[ true, null, true, 'Cannot cast value of type bool to int' ],
-			[ false, null, true, 'Cannot cast value of type bool to int' ],
+			[ '5.99', null, true, 'float-like string', 'int' ],
+			[ '5.0', null, true, 'float-like string', 'int' ],
+			[ true, null, true, 'bool', 'int' ],
+			[ false, null, true, 'bool', 'int' ],
 			[ '0', 0, false ],
 			[ 0, 0, false ],
 			[ 456, 456, false ],
-			[ 'abc', null, true, 'Cannot cast value of type string to int' ],
-			[ '', null, true, 'Cannot cast value of type string to int' ],
-			[ null, null, true, 'Cannot cast value of type null to int' ],
-			[ [], null, true, 'Cannot cast value of type array to int' ],
-			[ new stdClass(), null, true, 'Cannot cast value of type stdClass to int' ],
+			[ 456.0, null, true, 'float', 'int' ],
+			[ 'abc', null, true, 'string', 'int' ],
+			[ '', null, true, 'string', 'int' ],
+			[ null, null, true, 'null', 'int' ],
+			[ [], null, true, 'array', 'int' ],
+			[ new stdClass(), null, true, 'stdClass', 'int' ],
 			[
 				new class() {
 
@@ -134,10 +146,74 @@ final class TypeCasterTest extends TestCase {
 				},
 				null,
 				true,
-				'Cannot cast value of type class@anonymous to int',
+				'class@anonymous',
+				'int',
 			],
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-			[ fopen( 'php://memory', 'r' ), null, true, 'Cannot cast value of type resource to int' ],
+			[ fopen( 'php://memory', 'r' ), null, true, 'resource', 'int' ],
+		];
+	}
+
+	#[Test]
+	#[DataProvider( 'provide_values_for_to_float' )]
+	public function it_casts_to_float_or_throws(
+		mixed $value,
+		?float $expected,
+		bool $should_throw,
+		?string $expected_source_type = null,
+		?string $expected_target_type = null,
+	): void {
+
+		if ( $should_throw ) {
+			$this->expectException( InvalidArgumentException::class );
+
+			if ( $expected_source_type !== null && $expected_target_type !== null ) {
+
+				if ( is_resource( $value ) ) {
+					$pattern = '/Cannot cast resource(?: \([a-z]+\))? to float/';
+					$this->expectExceptionMessageMatches( $pattern );
+				} else {
+					$this->expectExceptionMessage(
+						self::formatInvalidCastMessage( $expected_source_type, $expected_target_type ),
+					);
+				}
+			}
+		}
+
+		$result = TypeCaster::to_float( $value );
+		$this->assertSame( $expected, $result );
+	}
+
+	public static function provide_values_for_to_float(): array {
+
+		return [
+			[ '123', 123.0, false ],
+			[ '5.99', 5.99, false ],
+			[ true, null, true, 'bool', 'float' ],
+			[ false, null, true, 'bool', 'float' ],
+			[ '0', 0.0, false ],
+			[ 0, 0.0, false ],
+			[ 456.78, 456.78, false ],
+			[ 'abc', null, true, 'string', 'float' ],
+			[ '', null, true, 'string', 'float' ],
+			[ null, null, true, 'null', 'float' ],
+			[ [], null, true, 'array', 'float' ],
+			[ new stdClass(), null, true, 'stdClass', 'float' ],
+			[
+				new class() {
+
+					public function __toString(): string {
+
+						return '42.5';
+					}
+				},
+				null,
+				true,
+				'class@anonymous',
+				'float',
+			],
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+			[ fopen( 'php://memory', 'r' ), null, true, 'resource', 'float' ],
 		];
 	}
 
@@ -147,19 +223,22 @@ final class TypeCasterTest extends TestCase {
 		mixed $value,
 		?string $expected,
 		bool $should_throw,
-		?string $expected_message = null,
+		?string $expected_source_type = null,
+		?string $expected_target_type = null,
 	): void {
 
 		if ( $should_throw ) {
 			$this->expectException( InvalidArgumentException::class );
 
-			if ( $expected_message !== null ) {
+			if ( $expected_source_type !== null && $expected_target_type !== null ) {
 
 				if ( is_resource( $value ) ) {
-					$pattern = '/' . preg_quote( 'Cannot cast value of type resource', '/' ) . '/';
+					$pattern = '/Cannot cast resource(?: \([a-z]+\))? to string/';
 					$this->expectExceptionMessageMatches( $pattern );
 				} else {
-					$this->expectExceptionMessage( $expected_message );
+					$this->expectExceptionMessage(
+						self::formatInvalidCastMessage( $expected_source_type, $expected_target_type ),
+					);
 				}
 			}
 		}
@@ -171,10 +250,10 @@ final class TypeCasterTest extends TestCase {
 	public static function provide_values_for_to_string(): array {
 
 		return [
-			[ 123, null, true, 'Cannot cast numeric to string' ],
-			[ 5.7, null, true, 'Cannot cast numeric to string' ],
-			[ true, null, true, 'Cannot cast bool to string' ],
-			[ false, null, true, 'Cannot cast bool to string' ],
+			[ 123, null, true, 'numeric', 'string' ],
+			[ 5.7, null, true, 'numeric', 'string' ],
+			[ true, null, true, 'bool', 'string' ],
+			[ false, null, true, 'bool', 'string' ],
 			[ 'text', 'text', false ],
 			[ '  text  ', 'text', false ],
 			[ '', '', false ],
@@ -189,39 +268,79 @@ final class TypeCasterTest extends TestCase {
 				'stringable-object',
 				false,
 			],
-			[ new stdClass(), null, true, 'Cannot cast value of type stdClass to string' ],
-			[ null, null, true, 'Cannot cast value of type null to string' ],
-			[ [], null, true, 'Cannot cast value of type array to string' ],
-			[ [ 'array' ], null, true, 'Cannot cast value of type array to string' ],
+			[ new stdClass(), null, true, 'stdClass', 'string' ],
+			[ null, null, true, 'null', 'string' ],
+			[ [], null, true, 'array', 'string' ],
+			[ [ 'array' ], null, true, 'array', 'string' ],
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
-			[ fopen( 'php://memory', 'r' ), null, true, 'Cannot cast value of type resource to string' ],
+			[ fopen( 'php://memory', 'r' ), null, true, 'resource', 'string' ],
 		];
 	}
 
 	#[Test]
-	#[DataProvider( 'provide_values_for_to_id' )]
-	public function it_casts_to_id_or_throws(
+	#[DataProvider( 'provide_values_for_to_scalar' )]
+	public function it_casts_to_scalar_or_throws(
 		mixed $value,
-		int|string|null $expected,
+		bool|int|float|string|null $expected,
 		bool $should_throw,
-		?string $expected_message_part = null,
+		?string $expected_source_type = null,
+		?string $expected_target_type = null,
 	): void {
 
 		if ( $should_throw ) {
 			$this->expectException( InvalidArgumentException::class );
 
-			if ( $expected_message_part !== null ) {
+			if ( $expected_source_type !== null && $expected_target_type !== null ) {
 
-				if ( $value === null ) {
-					$pattern = '/' . preg_quote( 'Cannot cast value to valid entity ID', '/' ) . '/';
-					$this->expectExceptionMessageMatches( $pattern );
-				} elseif ( $value === '' ) {
-					$pattern = '/' . preg_quote( 'EntityId must be a valid UUID', '/' ) . '/';
+				if ( is_resource( $value ) ) {
+					$pattern = '/Cannot cast resource(?: \([a-z]+\))? to scalar/';
 					$this->expectExceptionMessageMatches( $pattern );
 				} else {
-					$this->expectExceptionMessageMatches( '/' . preg_quote( $expected_message_part, '/' ) . '/' );
+					$this->expectExceptionMessage(
+						self::formatInvalidCastMessage( $expected_source_type, $expected_target_type ),
+					);
 				}
 			}
+		}
+
+		$result = TypeCaster::to_scalar( $value );
+		$this->assertSame( $expected, $result );
+	}
+
+	public static function provide_values_for_to_scalar(): array {
+
+		return [
+			// bool.
+			[ true, true, false ],
+			[ 'true', true, false ],
+			[ 1, true, false ],
+
+			// int.
+			[ '123', 123, false ],
+
+			// float.
+			[ '5.6', 5.6, false ],
+
+			// string.
+			[ 'abc', 'abc', false ],
+			[ '  xyz  ', 'xyz', false ],
+
+			// failures.
+			[ [], null, true, 'array', 'scalar' ],
+			[ new stdClass(), null, true, 'stdClass', 'scalar' ],
+			[ null, null, true, 'null', 'scalar' ],
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+			[ fopen( 'php://memory', 'r' ), null, true, 'resource', 'scalar' ],
+		];
+	}
+
+	#[Test]
+	#[DataProvider( 'provide_values_for_to_id' )]
+	public function it_casts_to_id_or_throws( mixed $value, int|string|null $expected, bool $should_throw ): void {
+
+		if ( $should_throw ) {
+			$this->expectException( InvalidArgumentException::class );
+			$this->expectExceptionMessageMatches( '/Cannot cast value to valid entity ID/' );
 		}
 
 		$result = TypeCaster::to_id( $value );
@@ -234,16 +353,21 @@ final class TypeCasterTest extends TestCase {
 			[ 1, 1, false ],
 			[ 123_456, 123_456, false ],
 			[ '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000', false ],
-			[ 'not-a-uuid', null, true, 'EntityId must be a valid UUID' ],
-			[ 0, null, true, 'EntityId must be a positive integer' ],
-			[ -1, null, true, 'EntityId must be a positive integer' ],
-			[ '', null, true, 'EntityId::create()' ],
-			[ null, null, true, 'EntityId::create()' ],
-			[ true, null, true, 'EntityId::create()' ],
-			[ false, null, true, 'EntityId::create()' ],
-			[ [], null, true, 'EntityId::create()' ],
-			[ [ 'id' => 1 ], null, true, 'EntityId::create()' ],
-			[ new stdClass(), null, true, 'EntityId::create()' ],
+			[ 'not-a-uuid', null, true ],
+			[ 0, null, true ],
+			[ -1, null, true ],
+			[ '', null, true ],
+			[ null, null, true ],
+			[ true, null, true ],
+			[ false, null, true ],
+			[ [], null, true ],
+			[ [ 'id' => 1 ], null, true ],
+			[ new stdClass(), null, true ],
 		];
+	}
+
+	private static function formatInvalidCastMessage( string $source_type, string $target_type ): string {
+
+		return sprintf( 'Cannot cast %s to %s', $source_type, $target_type );
 	}
 }

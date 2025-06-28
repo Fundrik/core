@@ -30,6 +30,14 @@
 		</properties>
 	</rule>
 
+	<rule ref="FundrikStandard.Classes.AbstractClassMustBeReadonly">
+		<properties>
+			<property name="excludedParentClasses" type="array">
+				<element value="Throwable"/>
+			</property>
+		</properties>
+	</rule>
+
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">

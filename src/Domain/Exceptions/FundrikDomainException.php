@@ -4,13 +4,19 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain\Exceptions;
 
+use DomainException;
+
 // phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
- * Exception thrown when an entity ID is invalid.
+ * Base exception for domain-related errors in the Fundrik core.
  *
- * Typically thrown by EntityId::create when the ID is not a non-empty int or non-empty string.
+ * This exception serves as a common ancestor for all exceptions
+ * related to domain invariants, rules, and validation logic.
+ *
+ * Catching this exception allows handling any domain-level failure
+ * across subdomains (e.g., Campaigns, Donations) in a consistent way.
  *
  * @since 1.0.0
  */
-final class InvalidEntityIdException extends FundrikDomainException {}
+abstract class FundrikDomainException extends DomainException {}
 // phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

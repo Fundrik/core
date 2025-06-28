@@ -13,10 +13,10 @@ use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTargetException;
 use Fundrik\Core\Domain\EntityId;
 use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
 use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Tests\FundrikTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignFactory::class )]
 #[UsesClass( Campaign::class )]
@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
 #[UsesClass( TypeCaster::class )]
-final class CampaignFactoryTest extends TestCase {
+final class CampaignFactoryTest extends FundrikTestCase {
 
 	private CampaignFactory $factory;
 

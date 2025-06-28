@@ -6,12 +6,12 @@ namespace Fundrik\Core\Tests\Domain\Campaigns;
 
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
 use Fundrik\Core\Domain\Campaigns\Exceptions\InvalidCampaignTitleException;
+use Fundrik\Core\Tests\FundrikTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( CampaignTitle::class )]
-final class CampaignTitleTest extends TestCase {
+final class CampaignTitleTest extends FundrikTestCase {
 
 	#[Test]
 	public function creates_with_valid_title(): void {

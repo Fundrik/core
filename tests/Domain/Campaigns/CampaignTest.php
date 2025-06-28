@@ -8,16 +8,18 @@ use Fundrik\Core\Domain\Campaigns\Campaign;
 use Fundrik\Core\Domain\Campaigns\CampaignTarget;
 use Fundrik\Core\Domain\Campaigns\CampaignTitle;
 use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Support\TypeCaster;
+use Fundrik\Core\Tests\FundrikTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use PHPUnit\Framework\TestCase;
 
 #[CoversClass( Campaign::class )]
 #[UsesClass( EntityId::class )]
 #[UsesClass( CampaignTitle::class )]
 #[UsesClass( CampaignTarget::class )]
-final class CampaignTest extends TestCase {
+#[UsesClass( TypeCaster::class )]
+final class CampaignTest extends FundrikTestCase {
 
 	#[Test]
 	public function campaign_returns_all_expected_values(): void {

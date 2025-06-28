@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Application\Campaigns;
 
+use Fundrik\Core\Application\Campaigns\Exceptions\InvalidCampaignDtoInputException;
 use Fundrik\Core\Domain\Campaigns\Campaign;
-use Fundrik\Core\Support\TypedArrayExtractor;
+use Fundrik\Core\Support\ArrayExtractor;
+use Fundrik\Core\Support\Exceptions\ArrayExtractionException;
 
 /**
  * Factory for creating CampaignDto objects from arrays or domain entities.
- *
- * Resides in Application layer bridging between raw data and domain models.
- * Assumes input data is already validated or trusted.
  *
  * @since 1.0.0
  */
@@ -34,14 +33,21 @@ final readonly class CampaignDtoFactory {
 	 */
 	public function from_array( array $data ): CampaignDto {
 
-		return new CampaignDto(
-			id: TypedArrayExtractor::extract_id_required( $data, 'id' ),
-			title: TypedArrayExtractor::extract_string_required( $data, 'title' ),
-			is_enabled: TypedArrayExtractor::extract_bool_required( $data, 'is_enabled' ),
-			is_open: TypedArrayExtractor::extract_bool_required( $data, 'is_open' ),
-			has_target: TypedArrayExtractor::extract_bool_required( $data, 'has_target' ),
-			target_amount: TypedArrayExtractor::extract_int_required( $data, 'target_amount' ),
-		);
+		try {
+			return new CampaignDto(
+				id: ArrayExtractor::extract_id_required( $data, 'id' ),
+				title: ArrayExtractor::extract_string_required( $data, 'title' ),
+				is_enabled: ArrayExtractor::extract_bool_required( $data, 'is_enabled' ),
+				is_open: ArrayExtractor::extract_bool_required( $data, 'is_open' ),
+				has_target: ArrayExtractor::extract_bool_required( $data, 'has_target' ),
+				target_amount: ArrayExtractor::extract_int_required( $data, 'target_amount' ),
+			);
+		} catch ( ArrayExtractionException $e ) {
+			throw new InvalidCampaignDtoInputException(
+				'Failed to create CampaignDto from array: ' . $e->getMessage(),
+				previous: $e,
+			);
+		}
 	}
 
 	/**

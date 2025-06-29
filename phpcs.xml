@@ -46,6 +46,14 @@
 		</properties>
 	</rule>
 
+	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace">
+		<exclude-pattern>*/Exceptions/*</exclude-pattern>
+	</rule>
+
+	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace">
+		<exclude-pattern>*/Exceptions/*</exclude-pattern>
+	</rule>
+
 	<rule ref="Squiz.Commenting.ClassComment.Missing">
 		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>

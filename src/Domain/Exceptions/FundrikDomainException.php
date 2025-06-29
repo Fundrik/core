@@ -6,7 +6,6 @@ namespace Fundrik\Core\Domain\Exceptions;
 
 use DomainException;
 
-// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Base exception for domain-related errors in the Fundrik core.
  *
@@ -19,4 +18,3 @@ use DomainException;
  * @since 1.0.0
  */
 abstract class FundrikDomainException extends DomainException {}
-// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

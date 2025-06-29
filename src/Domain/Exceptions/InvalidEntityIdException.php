@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain\Exceptions;
 
-// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Exception thrown when an entity ID is invalid.
  *
@@ -13,4 +12,3 @@ namespace Fundrik\Core\Domain\Exceptions;
  * @since 1.0.0
  */
 final class InvalidEntityIdException extends FundrikDomainException {}
-// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

@@ -6,7 +6,6 @@ namespace Fundrik\Core\Support\Exceptions;
 
 use InvalidArgumentException;
 
-// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Exception thrown when a value cannot be extracted or casted from an array.
  *
@@ -20,4 +19,3 @@ use InvalidArgumentException;
  * @since 1.0.0
  */
 final class ArrayExtractionException extends InvalidArgumentException {}
-// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

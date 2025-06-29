@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Domain\Campaigns\Exceptions;
 
-// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Exception thrown when a campaign target configuration is invalid.
  *
@@ -13,4 +12,3 @@ namespace Fundrik\Core\Domain\Campaigns\Exceptions;
  * @since 1.0.0
  */
 final class InvalidCampaignTargetException extends CampaignDomainException {}
-// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

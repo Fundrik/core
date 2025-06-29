@@ -6,7 +6,6 @@ namespace Fundrik\Core\Domain\Campaigns\Exceptions;
 
 use Fundrik\Core\Domain\Exceptions\FundrikDomainException;
 
-// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Base exception class for all domain-specific errors related to Campaign entities.
  *
@@ -16,4 +15,3 @@ use Fundrik\Core\Domain\Exceptions\FundrikDomainException;
  * @since 1.0.0
  */
 abstract class CampaignDomainException extends FundrikDomainException {}
-// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Application\Campaigns\Exceptions;
 
-use RuntimeException;
-
-// phpcs:disable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
 /**
  * Exception thrown when the input data provided to the Campaign DTO factory
  * is invalid or cannot be properly converted into a Campaign DTO.
@@ -16,5 +13,4 @@ use RuntimeException;
  *
  * @since 1.0.0
  */
-final class InvalidCampaignDtoInputException extends RuntimeException {}
-// phpcs:enable SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace, SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.IncorrectEmptyLinesBeforeClosingBrace
+final class InvalidCampaignDtoInputException extends CampaignApplicationException {}

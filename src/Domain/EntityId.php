@@ -96,7 +96,7 @@ final readonly class EntityId {
 		try {
 			return new self( TypeCaster::to_string( Uuid::fromString( $uuid ) ) );
 		} catch ( InvalidUuidStringException $e ) {
-			// phpcs:ignore SlevomatCodingStandard.Functions.RequireSingleLineCall.RequiredSingleLineCall
+
 			throw new InvalidEntityIdException(
 				message: "EntityId must be a valid UUID, given: {$uuid}",
 				previous: $e,

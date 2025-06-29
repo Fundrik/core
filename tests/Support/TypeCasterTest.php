@@ -366,6 +366,79 @@ final class TypeCasterTest extends FundrikTestCase {
 		];
 	}
 
+	#[Test]
+	#[DataProvider( 'provide_values_for_to_id_int' )]
+	public function it_casts_to_id_int_or_throws( mixed $value, ?int $expected, bool|string $should_throw = false ): void {
+
+		if ( $should_throw ) {
+			$this->expectException( InvalidArgumentException::class );
+
+			$message = is_string( $should_throw )
+				? $should_throw
+				: 'Cannot cast value to valid entity ID';
+
+			$this->expectExceptionMessageMatches( '/' . $message . '/' );
+		}
+
+		$result = TypeCaster::to_id_int( $value );
+		$this->assertSame( $expected, $result );
+	}
+
+	public static function provide_values_for_to_id_int(): array {
+
+		return [
+			[ 1, 1 ],
+			[ 123_456, 123_456 ],
+			[ '789', 789 ],
+
+			[ '550e8400-e29b-41d4-a716-446655440000', null, 'Cannot cast string to int' ],
+			[ 0, null, true ],
+			[ -1, null, true ],
+			[ '-10', null, true ],
+			[ '5.5', null, true ],
+			[ 5.0, null, true ],
+			[ 'abc', null, true ],
+			[ null, null, true ],
+			[ [], null, true ],
+			[ new stdClass(), null, true ],
+		];
+	}
+
+	#[Test]
+	#[DataProvider( 'provide_values_for_to_id_uuid' )]
+	public function it_casts_to_id_uuid_or_throws(
+		mixed $value,
+		?string $expected,
+		bool|string $should_throw = false,
+	): void {
+
+		if ( $should_throw ) {
+			$this->expectException( InvalidArgumentException::class );
+
+			$message = is_string( $should_throw ) ? $should_throw : 'Cannot cast value to valid entity ID';
+
+			$this->expectExceptionMessageMatches( '/' . $message . '/' );
+		}
+
+		$result = TypeCaster::to_id_uuid( $value );
+		$this->assertSame( $expected, $result );
+	}
+
+	public static function provide_values_for_to_id_uuid(): array {
+
+		return [
+			[ '550e8400-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440000' ],
+			[ '00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000' ],
+
+			[ 123, null, 'Cannot cast numeric to string' ],
+			[ 'not-a-uuid', null, true ],
+			[ '', null, true ],
+			[ null, null, true ],
+			[ [], null, true ],
+			[ new \stdClass(), null, true ],
+		];
+	}
+
 	private static function formatInvalidCastMessage( string $source_type, string $target_type ): string {
 
 		return sprintf( 'Cannot cast %s to %s', $source_type, $target_type );

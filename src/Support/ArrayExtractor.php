@@ -268,7 +268,12 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_id_required( array $data, string $key ): int|string {
 
-		return self::cast_value( $data, $key, TypeCaster::to_id( ... ), 'entity ID' );
+		return self::cast_value(
+			$data,
+			$key,
+			static fn ( mixed $value ): int|string => TypeCaster::to_id( $value ),
+			'entity ID',
+		);
 	}
 
 	/**

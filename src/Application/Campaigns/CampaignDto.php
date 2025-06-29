@@ -11,8 +11,6 @@ namespace Fundrik\Core\Application\Campaigns;
  * Carries raw or normalized data, typically retrieved from storage or external sources.
  *
  * @since 1.0.0
- *
- * @codeCoverageIgnore
  */
 final readonly class CampaignDto {
 

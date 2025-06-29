@@ -21,7 +21,7 @@ final readonly class CampaignDtoFactory {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data Raw campaign data.
+	 * @param array<string, scalar> $data Raw campaign data.
 	 *
 	 * @phpstan-param array{
 	 *   id: int|string,

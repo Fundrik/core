@@ -179,8 +179,6 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return int|string A validated ID.
-	 *
-	 * @phpstan-param int|string $value
 	 */
 	public static function to_id( mixed $value ): int|string {
 
@@ -194,6 +192,34 @@ final readonly class TypeCaster {
 				previous: $e,
 			);
 		}
+	}
+
+	/**
+	 * Converts the given value to a valid integer entity ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $value Input value.
+	 *
+	 * @return int Validated integer ID.
+	 */
+	public static function to_id_int( mixed $value ): int {
+
+		return self::to_int( self::to_id( $value ) );
+	}
+
+	/**
+	 * Converts the given value to a valid UUID string entity ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed $value Input value.
+	 *
+	 * @return string Validated UUID string ID.
+	 */
+	public static function to_id_uuid( mixed $value ): string {
+
+		return self::to_string( self::to_id( $value ) );
 	}
 
 	/**

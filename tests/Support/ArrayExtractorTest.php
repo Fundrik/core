@@ -302,4 +302,54 @@ final class ArrayExtractorTest extends FundrikTestCase {
 		$this->expectException( InvalidArgumentException::class );
 		ArrayExtractor::extract_id_required( [ 'id' => null ], 'id' );
 	}
+
+	#[Test]
+	public function it_extracts_id_int_required_correctly(): void {
+
+		$this->assertSame( 123, ArrayExtractor::extract_id_int_required( [ 'id' => 123 ], 'id' ) );
+		$this->assertSame( 42, ArrayExtractor::extract_id_int_required( [ 'id' => '42' ], 'id' ) );
+	}
+
+	#[Test]
+	public function it_throws_on_invalid_id_int_required(): void {
+
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'EntityId must be a positive integer' );
+
+		ArrayExtractor::extract_id_int_required( [ 'id' => -5 ], 'id' );
+	}
+
+	#[Test]
+	public function it_throws_on_missing_id_int_required(): void {
+
+		$this->expectException( ArrayExtractionException::class );
+		$this->expectExceptionMessage( "Missing required key 'id'" );
+
+		ArrayExtractor::extract_id_int_required( [], 'id' );
+	}
+
+	#[Test]
+	public function it_extracts_id_uuid_required_correctly(): void {
+
+		$uuid = '550e8400-e29b-41d4-a716-446655440000';
+		$this->assertSame( $uuid, ArrayExtractor::extract_id_uuid_required( [ 'id' => $uuid ], 'id' ) );
+	}
+
+	#[Test]
+	public function it_throws_on_invalid_id_uuid_required(): void {
+
+		$this->expectException( InvalidArgumentException::class );
+		$this->expectExceptionMessage( 'EntityId must be a valid UUID' );
+
+		ArrayExtractor::extract_id_uuid_required( [ 'id' => 'not-a-uuid' ], 'id' );
+	}
+
+	#[Test]
+	public function it_throws_on_missing_id_uuid_required(): void {
+
+		$this->expectException( ArrayExtractionException::class );
+		$this->expectExceptionMessage( "Missing required key 'id'" );
+
+		ArrayExtractor::extract_id_uuid_required( [], 'id' );
+	}
 }

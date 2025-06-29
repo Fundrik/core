@@ -255,7 +255,7 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an ID value from the given array by key.
+	 * Extracts an entity ID from the given array by key.
 	 *
 	 * Throws an exception if the key is missing or the value is not a valid entity ID.
 	 *
@@ -273,6 +273,50 @@ final readonly class ArrayExtractor {
 			$key,
 			static fn ( mixed $value ): int|string => TypeCaster::to_id( $value ),
 			'entity ID',
+		);
+	}
+
+	/**
+	 * Extracts an integer entity ID from the given array by key.
+	 *
+	 * Throws an exception if the key is missing or the value is not a valid integer entity ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array<mixed> $data The source array.
+	 * @param string $key The key to look up.
+	 *
+	 * @return int The validated integer entity ID.
+	 */
+	public static function extract_id_int_required( array $data, string $key ): int {
+
+		return self::cast_value(
+			$data,
+			$key,
+			static fn ( mixed $value ): int => TypeCaster::to_id_int( $value ),
+			'integer entity ID',
+		);
+	}
+
+	/**
+	 * Extracts a UUID string entity ID from the given array by key.
+	 *
+	 * Throws an exception if the key is missing or the value is not a valid UUID string entity ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array<mixed> $data The source array.
+	 * @param string $key The key to look up.
+	 *
+	 * @return string The validated UUID string entity ID.
+	 */
+	public static function extract_id_uuid_required( array $data, string $key ): string {
+
+		return self::cast_value(
+			$data,
+			$key,
+			static fn ( mixed $value ): string => TypeCaster::to_id_uuid( $value ),
+			'UUID entity ID',
 		);
 	}
 

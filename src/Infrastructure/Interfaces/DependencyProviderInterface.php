@@ -27,7 +27,13 @@ interface DependencyProviderInterface {
 	 *
 	 * @param string $category Optional category to filter bindings.
 	 *
-	 * @return array<string, array<string, string|Closure>>|array<string, Closure|string> Bindings keyed by identifier.
+	 * @return array<string, array<string, string|Closure>>|array<string, string|Closure> Bindings keyed by identifier.
+	 *
+	 * @phpstan-return (
+	 *   $category is ''
+	 *     ? array<string, array<class-string, class-string|Closure>>
+	 *     : array<class-string, class-string|Closure>
+	 * )
 	 */
 	public function get_bindings( string $category = '' ): array;
 }

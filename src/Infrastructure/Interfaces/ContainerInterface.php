@@ -25,6 +25,12 @@ interface ContainerInterface {
 	 *
 	 * @param string $id Fully qualified class or interface name.
 	 *
+	 * @template TGet of object
+	 *
+	 * @phpstan-param class-string<TGet> $id
+	 *
+	 * @phpstan-return TGet
+	 *
 	 * @return object Resolved instance.
 	 */
 	public function get( string $id ): object;
@@ -38,6 +44,12 @@ interface ContainerInterface {
 	 *
 	 * @param string $id Class or interface name.
 	 * @param array<string, mixed> $parameters Optional parameters to pass during instantiation.
+	 *
+	 * @template TMake of object
+	 *
+	 * @phpstan-param class-string<TMake> $id
+	 *
+	 * @phpstan-return TMake
 	 *
 	 * @return object The created instance.
 	 *
@@ -53,6 +65,8 @@ interface ContainerInterface {
 	 * @since 1.0.0
 	 *
 	 * @param string $id Fully qualified class or interface name.
+	 *
+	 * @phpstan-param class-string<object> $id
 	 *
 	 * @return bool True if a binding exists, false otherwise.
 	 */
@@ -71,6 +85,11 @@ interface ContainerInterface {
 	 *
 	 * @param string $abstract Abstract identifier.
 	 * @param Closure|string|null $concrete Optional implementation or factory.
+	 *
+	 * @template TSingleton of object
+	 *
+	 * @phpstan-param class-string<TSingleton> $abstract
+	 * @phpstan-param (Closure(): TSingleton)|class-string<TSingleton>|null $concrete
 	 */
 	public function singleton(
 		// phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.abstractFound

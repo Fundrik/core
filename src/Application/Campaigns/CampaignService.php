@@ -37,8 +37,6 @@ final readonly class CampaignService {
 	 * @param EntityId $id Campaign identifier.
 	 *
 	 * @return Campaign|null Returns Campaign if found, otherwise null.
-	 *
-	 * @note Exceptions from the repository are propagated up and must be handled by caller.
 	 */
 	public function get_campaign_by_id( EntityId $id ): ?Campaign {
 
@@ -53,8 +51,6 @@ final readonly class CampaignService {
 	 * @since 1.0.0
 	 *
 	 * @return array<Campaign> Array of Campaign objects.
-	 *
-	 * @note Exceptions from the repository are propagated and must be handled by caller.
 	 */
 	public function get_all_campaigns(): array {
 

@@ -21,13 +21,24 @@ final readonly class CampaignDtoFactory {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array<string, int|string|bool> $data Raw campaign data with keys:
-	 *      - id (int|string) Campaign ID
-	 *      - title (string) Campaign title
-	 *      - is_enabled (bool) Whether campaign is enabled (visible/active)
-	 *      - is_open (bool) Whether campaign is open
-	 *      - has_target (bool) Whether campaign has a fundraising target
-	 *      - target_amount (int) The fundraising target amount.
+	 * @param array $data Raw campaign data.
+	 *
+	 * @phpstan-param array{
+	 *   id: int|string,
+	 *   title: string,
+	 *   is_enabled: bool,
+	 *   is_open: bool,
+	 *   has_target: bool,
+	 *   target_amount: int
+	 * } $data
+	 *
+	 * Data keys:
+	 *  - id Campaign ID
+	 *  - title Campaign title
+	 *  - is_enabled Whether campaign is enabled (visible/active)
+	 *  - is_open Whether campaign is open
+	 *  - has_target Whether campaign has a fundraising target
+	 *  - target_amount The fundraising target amount
 	 *
 	 * @return CampaignDto The constructed DTO.
 	 */

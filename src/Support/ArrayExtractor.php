@@ -35,7 +35,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_bool_optional( array $data, string $key ): ?bool {
 
-		return self::cast_value_optional( $data, $key, TypeCaster::to_bool( ... ), 'bool' );
+		return self::cast_value( $data, $key, TypeCaster::to_bool( ... ), 'bool', required: false );
 	}
 
 	/**
@@ -53,7 +53,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_int_optional( array $data, string $key ): ?int {
 
-		return self::cast_value_optional( $data, $key, TypeCaster::to_int( ... ), 'int' );
+		return self::cast_value( $data, $key, TypeCaster::to_int( ... ), 'int', required: false );
 	}
 
 	/**
@@ -71,7 +71,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_float_optional( array $data, string $key ): ?float {
 
-		return self::cast_value_optional( $data, $key, TypeCaster::to_float( ... ), 'float' );
+		return self::cast_value( $data, $key, TypeCaster::to_float( ... ), 'float', required: false );
 	}
 
 	/**
@@ -89,7 +89,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_string_optional( array $data, string $key ): ?string {
 
-		return self::cast_value_optional( $data, $key, TypeCaster::to_string( ... ), 'string' );
+		return self::cast_value( $data, $key, TypeCaster::to_string( ... ), 'string', required: false );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_scalar_optional( array $data, string $key ): bool|int|float|string|null {
 
-		return self::cast_value_optional( $data, $key, TypeCaster::to_scalar( ... ), 'scalar' );
+		return self::cast_value( $data, $key, TypeCaster::to_scalar( ... ), 'scalar', required: false );
 	}
 
 	/**
@@ -124,7 +124,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_array_optional( array $data, string $key ): ?array {
 
-		return self::cast_value_optional(
+		return self::cast_value(
 			$data,
 			$key,
 			static function ( mixed $value ): array {
@@ -136,6 +136,7 @@ final readonly class ArrayExtractor {
 				return $value;
 			},
 			'array',
+			required: false,
 		);
 	}
 
@@ -153,7 +154,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_bool_required( array $data, string $key ): bool {
 
-		return self::cast_value_required( $data, $key, TypeCaster::to_bool( ... ), 'bool' );
+		return self::cast_value( $data, $key, TypeCaster::to_bool( ... ), 'bool' );
 	}
 
 	/**
@@ -170,7 +171,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_int_required( array $data, string $key ): int {
 
-		return self::cast_value_required( $data, $key, TypeCaster::to_int( ... ), 'int' );
+		return self::cast_value( $data, $key, TypeCaster::to_int( ... ), 'int' );
 	}
 
 	/**
@@ -187,7 +188,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_float_required( array $data, string $key ): float {
 
-		return self::cast_value_required( $data, $key, TypeCaster::to_float( ... ), 'float' );
+		return self::cast_value( $data, $key, TypeCaster::to_float( ... ), 'float' );
 	}
 
 	/**
@@ -204,7 +205,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_string_required( array $data, string $key ): string {
 
-		return self::cast_value_required( $data, $key, TypeCaster::to_string( ... ), 'string' );
+		return self::cast_value( $data, $key, TypeCaster::to_string( ... ), 'string' );
 	}
 
 	/**
@@ -221,7 +222,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_scalar_required( array $data, string $key ): bool|int|float|string {
 
-		return self::cast_value_required( $data, $key, TypeCaster::to_scalar( ... ), 'scalar' );
+		return self::cast_value( $data, $key, TypeCaster::to_scalar( ... ), 'scalar' );
 	}
 
 	/**
@@ -238,7 +239,7 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_array_required( array $data, string $key ): array {
 
-		return self::cast_value_required(
+		return self::cast_value(
 			$data,
 			$key,
 			static function ( mixed $value ): array {
@@ -267,16 +268,20 @@ final readonly class ArrayExtractor {
 	 */
 	public static function extract_id_required( array $data, string $key ): int|string {
 
-		return self::cast_value_required( $data, $key, TypeCaster::to_id( ... ), 'entity ID' );
+		return self::cast_value( $data, $key, TypeCaster::to_id( ... ), 'entity ID' );
 	}
 
 	/**
 	 * Common method to extract and cast a value from an array using a provided caster.
 	 *
 	 * - If the key is missing:
-	 *   - Throws exception.
-	 * - If the value is invalid type:
-	 *   - Throws exception.
+	 *   - Throws exception if $required is true.
+	 *   - Returns null if $required is false.
+	 *
+	 * - If the key exists but the value is of invalid type:
+	 *   - Always throws exception with detailed context.
+	 *
+	 * This method provides consistent error reporting for both optional and required extraction use cases.
 	 *
 	 * @since 1.0.0
 	 *
@@ -284,59 +289,30 @@ final readonly class ArrayExtractor {
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to extract.
-	 * @param callable(mixed): T $caster A function that attempts to cast the value.
+	 * @param callable $caster A function that attempts to cast the value.
 	 * @param string $type_description Human-readable description of the expected type.
+	 * @param bool $required Whether the key must exist in the array. Default: true.
 	 *
-	 * @return T
+	 * @phpstan-param callable(mixed): T $caster
+	 *
+	 * @phpstan-return ($required is true ? T : T|null)
+	 *
+	 * @return mixed The casted value, or null if not required and key is missing.
 	 */
-	private static function cast_value_required(
+	private static function cast_value(
 		array $data,
 		string $key,
 		callable $caster,
 		string $type_description,
+		bool $required = true,
 	): mixed {
 
 		if ( ! array_key_exists( $key, $data ) ) {
-			throw new ArrayExtractionException( "Missing required key '{$key}'" );
-		}
 
-		try {
-			return $caster( $data[ $key ] );
-		} catch ( InvalidArgumentException $e ) {
-			throw new ArrayExtractionException(
-				"Invalid value type at key '{$key}' (expected {$type_description}): " . $e->getMessage(),
-				previous: $e,
-			);
-		}
-	}
+			if ( $required ) {
+				throw new ArrayExtractionException( "Missing required key '{$key}'" );
+			}
 
-	/**
-	 * Common method to extract and cast a value from an array using a provided caster.
-	 *
-	 * - If the key is missing:
-	 *   - Returns null.
-	 * - If the value is invalid type:
-	 *   - Throws exception.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @template T
-	 *
-	 * @param array<mixed> $data The source array.
-	 * @param string $key The key to extract.
-	 * @param callable(mixed): T $caster A function that attempts to cast the value.
-	 * @param string $type_description Human-readable description of the expected type.
-	 *
-	 * @return T|null
-	 */
-	private static function cast_value_optional(
-		array $data,
-		string $key,
-		callable $caster,
-		string $type_description,
-	): mixed {
-
-		if ( ! array_key_exists( $key, $data ) ) {
 			return null;
 		}
 

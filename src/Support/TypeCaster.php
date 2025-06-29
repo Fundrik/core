@@ -30,8 +30,6 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return bool Converted boolean.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_bool( mixed $value ): bool {
 
@@ -58,8 +56,6 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return int Converted integer.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_int( mixed $value ): int {
 
@@ -88,8 +84,6 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return float Converted float.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_float( mixed $value ): float {
 
@@ -112,8 +106,6 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value.
 	 *
 	 * @return string Trimmed string.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_string( mixed $value ): string {
 
@@ -129,8 +121,6 @@ final readonly class TypeCaster {
 			self::throw_invalid_cast_exception( 'string', $value );
 		}
 
-		// phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable, Generic.Commenting.DocComment.MissingShort
-		/** @var string|Stringable $value */
 		return trim( (string) $value );
 	}
 
@@ -144,8 +134,6 @@ final readonly class TypeCaster {
 	 * @param mixed $value Input value to convert.
 	 *
 	 * @return bool|int|float|string The converted scalar value.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	public static function to_scalar( mixed $value ): bool|int|float|string {
 
@@ -192,13 +180,12 @@ final readonly class TypeCaster {
 	 *
 	 * @return int|string A validated ID.
 	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 * @phpstan-param int|string $value
 	 */
 	public static function to_id( mixed $value ): int|string {
 
 		try {
-			// phpcs:ignore SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.MissingVariable, Generic.Commenting.DocComment.MissingShort
-			/** @var int|string $value */
+			// @phpstan-ignore-next-line
 			$entity_id = EntityId::create( $value );
 			return $entity_id->value;
 		} catch ( InvalidEntityIdException | TypeError $e ) {
@@ -218,9 +205,9 @@ final readonly class TypeCaster {
 	 *
 	 * @param mixed $value Input value.
 	 *
-	 * @return bool True if the object implements Stringable, false otherwise.
+	 * @phpstan-assert-if-true Stringable $value
 	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
+	 * @return bool True if the object implements Stringable, false otherwise.
 	 */
 	private static function is_stringable_object( mixed $value ): bool {
 
@@ -237,8 +224,6 @@ final readonly class TypeCaster {
 	 * @param string $target_type The desired target type (e.g., 'int', 'bool', 'string').
 	 * @param mixed $value The original value that failed casting.
 	 * @param string|null $source_type Optional override for source type description; if null, determined from $value.
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint.DisallowedMixedTypeHint
 	 */
 	private static function throw_invalid_cast_exception(
 		string $target_type,

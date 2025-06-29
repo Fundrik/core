@@ -48,6 +48,7 @@
 
 	<rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
 		<exclude-pattern>src/Support/ArrayExtractor.php</exclude-pattern>
+		<exclude-pattern>src/Support/TypeCaster.php</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace">

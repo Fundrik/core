@@ -4,4 +4,6 @@ tests export-ignore
 .gitignore export-ignore
 composer.lock export-ignore
 phpcs.xml export-ignore
+phpstan-bootstrap.php export-ignore
+phpstan.neon export-ignore
 phpunit.xml export-ignore

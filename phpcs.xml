@@ -46,6 +46,10 @@
 		</properties>
 	</rule>
 
+	<rule ref="SlevomatCodingStandard.TypeHints.DisallowMixedTypeHint">
+		<exclude-pattern>src/Support/ArrayExtractor.php</exclude-pattern>
+	</rule>
+
 	<rule ref="SlevomatCodingStandard.Classes.EmptyLinesAroundClassBraces.MultipleEmptyLinesAfterOpeningBrace">
 		<exclude-pattern>*/Exceptions/*</exclude-pattern>
 	</rule>

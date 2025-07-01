@@ -24,12 +24,8 @@ interface ContainerInterface {
 	 * @since 1.0.0
 	 *
 	 * @param string $id Fully qualified class or interface name.
-	 *
-	 * @template TGet of object
-	 *
-	 * @phpstan-param class-string<TGet> $id
-	 *
-	 * @phpstan-return TGet
+	 * 
+	 * @phpstan-param class-string $id
 	 *
 	 * @return object Resolved instance.
 	 */
@@ -44,12 +40,8 @@ interface ContainerInterface {
 	 *
 	 * @param string $id Class or interface name.
 	 * @param array<string, mixed> $parameters Optional parameters to pass during instantiation.
-	 *
-	 * @template TMake of object
-	 *
-	 * @phpstan-param class-string<TMake> $id
-	 *
-	 * @phpstan-return TMake
+	 * 
+	 * @phpstan-param class-string $id
 	 *
 	 * @return object The created instance.
 	 *

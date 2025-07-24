@@ -8,30 +8,34 @@ use Fundrik\Core\Support\Exceptions\ArrayExtractionException;
 use InvalidArgumentException;
 
 /**
- * Helper class for safely extracting typed values from associative arrays
- * with options to return default values or null when keys are missing.
+ * Extracts and casts typed values from associative arrays using strict validation.
  *
- * Provides convenience methods to extract boolean, integer, and string values,
- * either returning sensible defaults (false, 0, '') or nullable values.
+ * Provides helpers for retrieving values as specific types such as boolean,
+ * integer, float, string, scalar, or array. Ensures that the extracted value
+ * matches the expected type and throws an exception otherwise.
  *
- * This ensures that extracted values always have consistent types for safer usage.
+ * Supports both optional and required extractions, returning null or throwing
+ * if the key is missing, depending on the method.
+ *
+ * @todo Consider moving extract_id_* methods out of this utility.
+ *       These methods depend on domain ID validation and may not belong
+ *       in a general-purpose array extraction tool.
  *
  * @since 1.0.0
  */
 final readonly class ArrayExtractor {
 
 	/**
-	 * Extracts a boolean value from the given array by key.
+	 * Extracts the boolean value for the given key from the source array.
 	 *
-	 * If the key exists, attempts to cast the value to bool using TypeCaster.
-	 * If the key is missing, returns null.
+	 * Returns null if the key is missing.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return bool|null The boolean value, or null if key is missing or value invalid.
+	 * @return bool|null The extracted boolean or null.
 	 */
 	public static function extract_bool_optional( array $data, string $key ): ?bool {
 
@@ -39,17 +43,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an integer value from the given array by key.
+	 * Extracts the integer value for the given key from the source array.
 	 *
-	 * If the key exists, attempts to cast the value to int using TypeCaster.
-	 * If the key is missing, returns null.
+	 * Returns null if the key is missing.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return int|null The integer value, or null if key is missing or value invalid.
+	 * @return int|null The extracted integer or null.
 	 */
 	public static function extract_int_optional( array $data, string $key ): ?int {
 
@@ -57,17 +60,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a float value from the given array by key.
+	 * Extracts the float value for the given key from the source array.
 	 *
-	 * If the key exists, attempts to cast the value to float using TypeCaster.
-	 * If the key is missing, returns null.
+	 * Returns null if the key is missing.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return float|null The float value, or null if key is missing or value invalid.
+	 * @return float|null The extracted float or null.
 	 */
 	public static function extract_float_optional( array $data, string $key ): ?float {
 
@@ -75,17 +77,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a string value from the given array by key.
+	 * Extracts the string value for the given key from the source array.
 	 *
-	 * If the key exists, attempts to cast the value to string using TypeCaster.
-	 * If the key is missing, returns null.
+	 * Returns null if the key is missing.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return string|null The string value, or null if key is missing or value invalid.
+	 * @return string|null The extracted string or null.
 	 */
 	public static function extract_string_optional( array $data, string $key ): ?string {
 
@@ -93,16 +94,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a scalar value from the given array by key.
+	 * Extracts the scalar value for the given key from the source array.
 	 *
-	 * If the key is missing, returns null.
+	 * Returns null if the key is missing.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return bool|int|float|string|null The scalar value, or null if key is missing or value invalid.
+	 * @return bool|int|float|string|null The extracted scalar or null.
 	 */
 	public static function extract_scalar_optional( array $data, string $key ): bool|int|float|string|null {
 
@@ -110,17 +111,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an array value from the given array by key.
+	 * Extracts the array value for the given key from the source array.
 	 *
-	 * If the key exists and the value is an array, returns it.
-	 * If the key is missing, returns null.
+	 * Returns null if the key is missing or the value is not an array.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return array<mixed>|null The array value, or null if key is missing or value is not an array.
+	 * @return array<mixed>|null The extracted array or null.
 	 */
 	public static function extract_array_optional( array $data, string $key ): ?array {
 
@@ -141,16 +141,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a boolean value from the given array by key.
+	 * Extracts the boolean value for the given key from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is invalid.
+	 * Throws if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return bool The boolean value.
+	 * @return bool The extracted boolean.
 	 */
 	public static function extract_bool_required( array $data, string $key ): bool {
 
@@ -158,16 +158,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an integer value from the given array by key.
+	 * Extracts the integer value for the given key from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is invalid.
+	 * Throws if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return int The integer value.
+	 * @return int The extracted integer.
 	 */
 	public static function extract_int_required( array $data, string $key ): int {
 
@@ -175,16 +175,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a float value from the given array by key.
+	 * Extracts the float value for the given key from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is invalid.
+	 * Throws if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return float The float value.
+	 * @return float The extracted float.
 	 */
 	public static function extract_float_required( array $data, string $key ): float {
 
@@ -192,16 +192,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a string value from the given array by key.
+	 * Extracts the string value for the given key from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is invalid.
+	 * Throws if the key is missing or the value is invalid.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return string The string value.
+	 * @return string The extracted string.
 	 */
 	public static function extract_string_required( array $data, string $key ): string {
 
@@ -209,16 +209,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a scalar value from the given array by key.
+	 * Extracts the scalar value for the given key from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is not a scalar.
+	 * Throws if the key is missing or the value is not a scalar.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return bool|int|float|string The scalar value.
+	 * @return bool|int|float|string The extracted scalar.
 	 */
 	public static function extract_scalar_required( array $data, string $key ): bool|int|float|string {
 
@@ -226,16 +226,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an array value from the given array by key.
+	 * Extracts the array value for the given key from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is not an array.
+	 * Throws if the key is missing or the value is not an array.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to look up.
 	 *
-	 * @return array<mixed> The array value.
+	 * @return array<mixed> The extracted array.
 	 */
 	public static function extract_array_required( array $data, string $key ): array {
 
@@ -255,16 +255,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an entity ID from the given array by key.
+	 * Extracts a validated entity ID (positive integer or UUID) from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is not a valid entity ID.
+	 * Throws if the key is missing or the value is not a valid ID format.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
-	 * @param string $key The key to look up.
+	 * @param string $key The key to extract.
 	 *
-	 * @return int|string The validated entity ID.
+	 * @return int|string The normalized entity ID.
 	 */
 	public static function extract_id_required( array $data, string $key ): int|string {
 
@@ -277,16 +277,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts an integer entity ID from the given array by key.
+	 * Extracts a validated integer entity ID from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is not a valid integer entity ID.
+	 * Throws if the key is missing or the value is not a valid integer ID.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
-	 * @param string $key The key to look up.
+	 * @param string $key The key to extract.
 	 *
-	 * @return int The validated integer entity ID.
+	 * @return int The normalized integer ID.
 	 */
 	public static function extract_id_int_required( array $data, string $key ): int {
 
@@ -299,16 +299,16 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Extracts a UUID string entity ID from the given array by key.
+	 * Extracts a validated UUID entity ID from the source array.
 	 *
-	 * Throws an exception if the key is missing or the value is not a valid UUID string entity ID.
+	 * Throws if the key is missing or the value is not a valid UUID.
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param array<mixed> $data The source array.
-	 * @param string $key The key to look up.
+	 * @param string $key The key to extract.
 	 *
-	 * @return string The validated UUID string entity ID.
+	 * @return string The normalized UUID ID.
 	 */
 	public static function extract_id_uuid_required( array $data, string $key ): string {
 
@@ -321,16 +321,11 @@ final readonly class ArrayExtractor {
 	}
 
 	/**
-	 * Common method to extract and cast a value from an array using a provided caster.
+	 * Extracts and casts the value for the given key using the provided caster.
 	 *
-	 * - If the key is missing:
-	 *   - Throws exception if $required is true.
-	 *   - Returns null if $required is false.
-	 *
-	 * - If the key exists but the value is of invalid type:
-	 *   - Always throws exception with detailed context.
-	 *
-	 * This method provides consistent error reporting for both optional and required extraction use cases.
+	 * - Returns null if the key is missing and not required.
+	 * - Throws if the key is missing and required.
+	 * - Throws if the caster fails to validate the input.
 	 *
 	 * @since 1.0.0
 	 *
@@ -338,15 +333,15 @@ final readonly class ArrayExtractor {
 	 *
 	 * @param array<mixed> $data The source array.
 	 * @param string $key The key to extract.
-	 * @param callable $caster A function that attempts to cast the value.
-	 * @param string $type_description Human-readable description of the expected type.
-	 * @param bool $required Whether the key must exist in the array. Default: true.
+	 * @param callable $caster The function that casts the input.
+	 * @param string $type_description The expected type name for error reporting.
+	 * @param bool $required Whether the key is required. Default: true.
 	 *
 	 * @phpstan-param callable(mixed): T $caster
 	 *
 	 * @phpstan-return ($required is true ? T : T|null)
 	 *
-	 * @return mixed The casted value, or null if not required and key is missing.
+	 * @return mixed The extracted and casted value.
 	 */
 	private static function cast_value(
 		array $data,

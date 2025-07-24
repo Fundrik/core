@@ -7,14 +7,11 @@ namespace Fundrik\Core\Support\Exceptions;
 use InvalidArgumentException;
 
 /**
- * Exception thrown when a value cannot be extracted or casted from an array.
+ * Signals a failure while extracting or casting a value from the source array.
  *
- * Typically used to indicate:
- * - Missing required keys.
- * - Invalid value types during casting.
- *
- * This exception wraps lower-level casting errors (e.g. from TypeCaster) and provides
- * clear context about which key caused the failure.
+ * Indicates that the extraction process failed due to:
+ * - a missing required key,
+ * - or an invalid value type during casting.
  *
  * @since 1.0.0
  */

@@ -4,32 +4,35 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Support;
 
-use Fundrik\Core\Domain\EntityId;
-use Fundrik\Core\Domain\Exceptions\InvalidEntityIdException;
+use Fundrik\Core\Components\Shared\Domain\EntityId;
+use Fundrik\Core\Components\Shared\Domain\Exceptions\InvalidEntityIdException;
 use InvalidArgumentException;
 use Stringable;
 use TypeError;
 
 /**
- * Utility class for safe and consistent type conversion.
+ * Provides strict casting utilities for transforming raw values into expected scalar types.
  *
- * Throws exceptions on invalid input instead of silently failing.
+ * Enforces predictable behavior by throwing exceptions on invalid input,
+ * unlike PHP's native type casts which may silently coerce values.
+ *
+ * @todo Evaluate moving ID-related logic (to_id*, etc.) to a dedicated Domain ID normalizer.
+ *       Current implementation introduces a domain leak into low-level utility code.
  *
  * @since 1.0.0
  */
 final readonly class TypeCaster {
 
 	/**
-	 * Converts the given value to a boolean.
+	 * Converts the input to a boolean.
 	 *
-	 * Throws if the value cannot be interpreted as a boolean.
-	 * Strictly disallows null and empty string.
+	 * Throws if the input is null, an empty string, or cannot be interpreted as a boolean.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value.
 	 *
-	 * @return bool Converted boolean.
+	 * @return bool The converted boolean.
 	 */
 	public static function to_bool( mixed $value ): bool {
 
@@ -47,15 +50,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Converts the given value to an integer.
+	 * Converts the input to an integer.
 	 *
-	 * Throws if the value is boolean or not numeric.
+	 * Throws if the input is a boolean, a float, or not numeric.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value.
 	 *
-	 * @return int Converted integer.
+	 * @return int The converted integer.
 	 */
 	public static function to_int( mixed $value ): int {
 
@@ -75,15 +78,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Converts the given value to a float.
+	 * Converts the input to a float.
 	 *
-	 * Throws if the value is boolean or not numeric.
+	 * Throws if the input is a boolean or not numeric.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value.
 	 *
-	 * @return float Converted float.
+	 * @return float The converted float.
 	 */
 	public static function to_float( mixed $value ): float {
 
@@ -95,17 +98,16 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Converts the given value to a string.
+	 * Converts the input to a trimmed string.
 	 *
-	 * Throws if the value not scalar and not stringable.
-	 *
-	 * Empty string is allowed.
+	 * Throws if the input is a boolean or a numeric value,
+	 * or if it is not stringable.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value.
 	 *
-	 * @return string Trimmed string.
+	 * @return string The converted string.
 	 */
 	public static function to_string( mixed $value ): string {
 
@@ -125,13 +127,13 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Attempts to convert the given value to a scalar type (bool, int, float, or string).
+	 * Converts the input to a scalar (bool, int, float, or string).
 	 *
-	 * Throws if the value not scalar.
+	 * Applies multiple conversion attempts in order, throwing if none succeed.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value to convert.
+	 * @param mixed $value The input value.
 	 *
 	 * @return bool|int|float|string The converted scalar value.
 	 */
@@ -169,16 +171,16 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Converts the given value to a valid entity ID (int or UUID string).
+	 * Converts the input to a valid entity ID (positive integer or UUID).
 	 *
-	 * Internally validates using the EntityId value object.
-	 * Throws if the value is not a valid ID format.
+	 * Validates the format using the EntityId value object.
+	 * Throws if the input is not a valid ID format.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value to validate.
 	 *
-	 * @return int|string A validated ID.
+	 * @return int|string The normalized entity ID value.
 	 */
 	public static function to_id( mixed $value ): int|string {
 
@@ -195,13 +197,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Converts the given value to a valid integer entity ID.
+	 * Converts the input to a validated integer entity ID.
+	 *
+	 * Applies domain validation and ensures the result is an positive integer.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value to validate.
 	 *
-	 * @return int Validated integer ID.
+	 * @return int The normalized integer ID.
 	 */
 	public static function to_id_int( mixed $value ): int {
 
@@ -209,13 +213,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Converts the given value to a valid UUID string entity ID.
+	 * Converts the input to a validated UUID entity ID.
+	 *
+	 * Applies domain validation and ensures the result is a UUID.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value to validate.
 	 *
-	 * @return string Validated UUID string ID.
+	 * @return string The normalized UUID ID.
 	 */
 	public static function to_id_uuid( mixed $value ): string {
 
@@ -223,17 +229,17 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Checks if a value is an object that can be cast to string.
+	 * Checks whether the input is an object that can be cast to string.
 	 *
-	 * In PHP 8+, all objects with __toString() implicitly implement Stringable.
+	 * Considers objects implementing __toString() or Stringable.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param mixed $value Input value.
+	 * @param mixed $value The input value.
 	 *
 	 * @phpstan-assert-if-true Stringable $value
 	 *
-	 * @return bool True if the object implements Stringable, false otherwise.
+	 * @return bool True if the object is stringable, false otherwise.
 	 */
 	private static function is_stringable_object( mixed $value ): bool {
 
@@ -241,15 +247,15 @@ final readonly class TypeCaster {
 	}
 
 	/**
-	 * Throws an InvalidArgumentException for an invalid type cast.
+	 * Throws an exception for a failed type cast.
 	 *
-	 * Generates a consistent exception message indicating the source and target types.
+	 * Constructs a detailed error message indicating the attempted source and target types.
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $target_type The desired target type (e.g., 'int', 'bool', 'string').
-	 * @param mixed $value The original value that failed casting.
-	 * @param string|null $source_type Optional override for source type description; if null, determined from $value.
+	 * @param string $target_type The target type to cast to (e.g., 'int', 'bool').
+	 * @param mixed $value The input value that failed to cast.
+	 * @param string|null $source_type The optional source type label; determined automatically if not provided.
 	 */
 	private static function throw_invalid_cast_exception(
 		string $target_type,

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Tests\Support;
 
-use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Components\Shared\Domain\EntityId;
 use Fundrik\Core\Support\ArrayExtractor;
 use Fundrik\Core\Support\Exceptions\ArrayExtractionException;
 use Fundrik\Core\Support\TypeCaster;
 use Fundrik\Core\Tests\FundrikTestCase;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 
@@ -351,5 +352,27 @@ final class ArrayExtractorTest extends FundrikTestCase {
 		$this->expectExceptionMessage( "Missing required key 'id'" );
 
 		ArrayExtractor::extract_id_uuid_required( [], 'id' );
+	}
+
+	#[Test]
+	#[DataProvider( 'optional_methods_that_throw_on_null' )]
+	public function optional_method_throws_on_null_value( callable $method, string $key ): void {
+
+		$this->expectException( ArrayExtractionException::class );
+		$this->expectExceptionMessage( "Invalid value type at key '{$key}'" );
+
+		$method( [ $key => null ], $key );
+	}
+
+	public static function optional_methods_that_throw_on_null(): array {
+
+		return [
+			[ ArrayExtractor::extract_bool_optional( ... ), 'flag' ],
+			[ ArrayExtractor::extract_int_optional( ... ), 'num' ],
+			[ ArrayExtractor::extract_float_optional( ... ), 'flt' ],
+			[ ArrayExtractor::extract_string_optional( ... ), 'text' ],
+			[ ArrayExtractor::extract_scalar_optional( ... ), 'val' ],
+			[ ArrayExtractor::extract_array_optional( ... ), 'arr' ],
+		];
 	}
 }

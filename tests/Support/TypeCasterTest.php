@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Fundrik\Core\Tests\Support;
 
-use Fundrik\Core\Domain\EntityId;
+use Fundrik\Core\Components\Shared\Domain\EntityId;
 use Fundrik\Core\Support\TypeCaster;
 use Fundrik\Core\Tests\FundrikTestCase;
 use InvalidArgumentException;

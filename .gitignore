@@ -1,3 +1,4 @@
+.context/
 .phpunit.cache/
 vendor/
 .deptrac.cache

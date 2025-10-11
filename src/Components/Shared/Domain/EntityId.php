@@ -11,7 +11,7 @@ use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents a strongly typed unique ID for a domain entity.
+ * Represents a strongly typed identifier for a domain entity.
  *
  * Accepts either a positive integer or a valid UUID.
  *

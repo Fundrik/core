@@ -50,7 +50,7 @@ final readonly class CreateUpdateDeleteWithId {
 		echo "\n=== create_campaign (with int ID) ===\n";
 		$this->scenario_with_int_id();
 
-		echo "\n=== create_campaign (with uuid ID) ===\n";
+		echo "\n=== create_campaign (with UUID ID) ===\n";
 		$this->scenario_with_uuid_id();
 
 		echo "\nDone.";
@@ -71,13 +71,10 @@ final readonly class CreateUpdateDeleteWithId {
 		$this->command_service->create_campaign( $campaign );
 		echo "Created: ID={$id->get_value()}, Title={$campaign->get_title()}\n";
 
-		$updated = new Campaign(
-			id: $id,
-			title: CampaignTitle::create( 'Books for Rural Schools — Extended' ),
-			is_active: true,
-			is_open: false,
-			target: CampaignTarget::create( true, 2_500 ),
-		);
+		$updated = $campaign
+			->rename( 'Books for Rural Schools — Extended' )
+			->close()
+			->enable_target( 2_500 );
 
 		$this->command_service->update_campaign( $updated );
 		echo "Updated: ID={$id->get_value()}, Title={$updated->get_title()}, Target={$updated->get_target_amount()}\n";
@@ -101,13 +98,11 @@ final readonly class CreateUpdateDeleteWithId {
 		$this->command_service->create_campaign( $campaign );
 		echo "Created: ID={$id->get_value()}, Title={$campaign->get_title()}\n";
 
-		$updated = new Campaign(
-			id: $id,
-			title: CampaignTitle::create( 'Clean Energy for Schools — Pilot Phase' ),
-			is_active: false,
-			is_open: false,
-			target: CampaignTarget::create( true, 12_000 ),
-		);
+		$updated = $campaign
+			->rename( 'Clean Energy for Schools — Pilot Phase' )
+			->deactivate()
+			->close()
+			->set_target_amount( 12_000 );
 
 		$this->command_service->update_campaign( $updated );
 		echo "Updated: ID={$id->get_value()}, Title={$updated->get_title()}, Target={$updated->get_target_amount()}\n";

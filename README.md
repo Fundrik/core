@@ -19,6 +19,7 @@
 - [Overview](#overview)
 - [Quick Start](#quick-start)
 - [Architecture](#architecture)
+- [Public API](#public-api)
 - [License](#license)
 
 ## Overview
@@ -232,6 +233,143 @@ Fundrik Core separates *what the system does* (**Components**)
 from *how it runs* (**Infrastructure**) —  
 keeping business logic clean, testable, and independent from technology.
 
+## Public API
+
+### Entities
+
+Entities in Fundrik Core are **immutable**, meaning every domain action (such as `rename` or `activate`) returns a **new entity instance** with an updated state, while the original remains unchanged.
+
+Invalid state transitions are not allowed — for example, attempting to activate an already active campaign throws a `CampaignChangeException`.
+
+Entities are responsible **only for maintaining and validating their internal state**. They do not handle persistence or external coordination.  
+To find, create, update, or delete entities in storage, use the **application services** (use cases) provided in the `Application` layer.
+
+#### EntityId
+
+`EntityId` represents a **cross-component domain identifier**. It can hold a positive integer or a valid UUID. 
+
+```php
+$int_id = EntityId::create( 200 );
+$uuid_id = EntityId::create( '0199d323-27a5-71cd-a480-25ad215e4faf' );
+
+$int_id->get_value();  // 200
+$uuid_id->get_value(); // 0199d323-27a5-71cd-a480-25ad215e4faf
+
+$another_int_id = EntityId::create( 200 );
+$int_id->equals( $another_int_id ); // true
+```
+
+#### Campaign
+
+```php
+$campaign = new Campaign(
+	id: EntityId::create( 123 ),
+	title: CampaignTitle::create( 'Save the Whales' ),
+	is_active: true,
+	is_open: false,
+	target: CampaignTarget::create( true, 100 ),
+);
+
+$updated = $campaign
+	->rename( 'Save the Birds' )
+	->deactivate()
+	->open()
+	->set_target_amount( 999 );
+
+$campaign->get_id();            // 123
+$campaign->get_title();         // Save the Whales
+$campaign->is_active();         // true
+$campaign->is_open();           // false
+$campaign->has_target();        // true
+$campaign->get_target_amount(); // 100
+
+$updated->get_id();             // 123
+$updated->get_title();          // Save the Birds
+$updated->is_active();          // false
+$updated->is_open();            // true
+$updated->has_target();         // true
+$updated->get_target_amount();  // 999
+```
+
+You can also build a `Campaign` from an associative array:
+
+```php
+$payload = [
+	'id' => 101, // or UUID, e.g. 0199d323-27a5-71cd-a480-25ad215e4faf.
+	'title' => 'Clean Water Initiative',
+	'is_active' => true,
+	'is_open' => true,
+	'has_target' => true,
+	'target_amount' => 500,
+];
+
+$dto_factory = new CampaignDtoFactory();
+$assembler = new CampaignAssembler();
+
+$dto = $dto_factory->from_array( $payload );
+$campaign = $assembler->from_dto( $dto );
+
+$campaign->get_title(); // Clean Water Initiative
+```
+
+See [`examples/Campaigns/BuildCampaignFromArray.php`](./examples/Campaigns/BuildCampaignFromArray.php) for the full example.
+
+### Application Services
+
+Application services define the **use cases** of the system.  
+They coordinate domain behavior, interact with repositories, and publish application events.
+
+#### CampaignQueryService
+
+`CampaignQueryService` provides **read-only operations** for retrieving campaigns.
+
+```php
+$campaign = $query_service->find_campaign_by_id( EntityId::create( 123 ) ); // Campaign instance or null if no campaign is found
+$all = $query_service->find_all_campaigns(); // List of Campaign instances (may be empty)
+```
+
+See [`examples/Campaigns/FindCampaignById.php`](./examples/Campaigns/FindCampaignById.php) and [`examples/Campaigns/FindAllCampaigns.php`](./examples/Campaigns/FindAllCampaigns.php) for detailed examples.
+
+#### CampaignCommandService
+
+`CampaignCommandService` handles **write operations** — creating, updating, saving, and deleting campaigns.
+
+```php
+// Create a new campaign
+$new = $command_service->create_campaign_without_id( // or use create_campaign method if you have built campaign with id
+	title: CampaignTitle::create( 'Plant a Million Trees' ),
+	is_active: true,
+	is_open: true,
+	target: CampaignTarget::create(true, 1_000_000),
+);
+
+// Update and save
+$updated = $new->rename( 'Reforest the Planet' );
+$command_service->save_campaign( $updated );
+
+// Delete
+$command_service->delete_campaign( $updated->get_id() );
+```
+
+Attempting to save a campaign that already exists, or to update or delete a campaign that does not exist, throws a `CampaignRepositoryExceptionInterface`.
+
+See the [`examples/Campaigns/`](./examples/Campaigns/) directory for detailed examples.
+
+### Events
+
+Events describe what has happened inside the core and allow other parts of the application to react, extend behavior, or perform side effects without changing the core logic.
+
+| Event | Triggered When |
+|--------|----------------|
+| **CampaignCreatedEvent** | A new campaign is created |
+| **CampaignUpdatedEvent** | An existing campaign is updated |
+| **CampaignDeletedEvent** | A campaign is deleted |
+
+All events are dispatched through the configured `EventBusPort`.
+
 ## License
 
 Fundrik Core is licensed under the [MIT License](LICENSE).
+
+
+

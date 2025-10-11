@@ -14,7 +14,6 @@ namespace Fundrik\Core\Examples\Campaigns;
 use Fundrik\Core\Components\Campaigns\Application\CampaignDtoFactory;
 use Fundrik\Core\Components\Campaigns\Application\Loggers\CampaignCommandServiceLogger;
 use Fundrik\Core\Components\Campaigns\Application\Services\CampaignCommandService;
-use Fundrik\Core\Components\Campaigns\Domain\Campaign;
 use Fundrik\Core\Components\Campaigns\Domain\CampaignTarget;
 use Fundrik\Core\Components\Campaigns\Domain\CampaignTitle;
 use Fundrik\Core\Examples\Infrastructure\EchoLogger;
@@ -55,15 +54,11 @@ final readonly class CreateUpdateDeleteWithoutId {
 		);
 
 		$id = $created->get_entity_id();
-		echo "Created: ID={$id->get_value()}, Title={$created->get_title()}\n";
+		echo "Created: ID={$id->get_value()}, Title={$created->get_title()}, Target={$created->get_target_amount()}\n";
 
-		$updated = new Campaign(
-			id: $id,
-			title: CampaignTitle::create( 'Clean Water for Kids — Phase 2' ),
-			is_active: true,
-			is_open: true,
-			target: CampaignTarget::create( true, 750 ),
-		);
+		$updated = $created
+			->rename( 'Clean Water for Kids — Phase 2' )
+			->set_target_amount( 750 );
 
 		$this->command_service->update_campaign( $updated );
 		echo "Updated: ID={$id->get_value()}, Title={$updated->get_title()}, Target={$updated->get_target_amount()}\n";

@@ -61,13 +61,9 @@ final readonly class SaveCampaign {
 		$this->command_service->save_campaign( $first );
 		echo "save_campaign #1: Inserted (ID={$id->get_value()}, Target={$first->get_target_amount()})\n";
 
-		$second = new Campaign(
-			id: $id,
-			title: CampaignTitle::create( 'Community Health Van — Stage 2' ),
-			is_active: true,
-			is_open: true,
-			target: CampaignTarget::create( true, 12_500 ),
-		);
+		$second = $first
+			->rename( 'Community Health Van — Stage 2' )
+			->disable_target();
 
 		$this->command_service->save_campaign( $second );
 		echo "save_campaign #2: Updated (ID={$id->get_value()}, Target={$second->get_target_amount()})\n";

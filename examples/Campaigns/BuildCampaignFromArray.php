@@ -14,7 +14,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 ( static function (): void {
 
 	$payload = [
-		'id' => 101, // or uuid, e.g. 0199d323-27a5-71cd-a480-25ad215e4faf.
+		'id' => 101, // or UUID, e.g. 0199d323-27a5-71cd-a480-25ad215e4faf.
 		'title' => 'Clean Water Initiative',
 		'is_active' => true,
 		'is_open' => true,

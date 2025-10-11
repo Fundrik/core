@@ -18,6 +18,7 @@
 			<property name="rootNamespaces" type="array">
 				<element key="src" value="Fundrik\Core"/>
 				<element key="tests" value="Fundrik\Core\Tests"/>
+				<element key="examples" value="Fundrik\Core\Examples"/>
 			</property>
 		</properties>
 	</rule>

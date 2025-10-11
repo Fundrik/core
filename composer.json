@@ -52,7 +52,8 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Fundrik\\Core\\Tests\\": "tests/"
+			"Fundrik\\Core\\Tests\\": "tests/",
+			"Fundrik\\Core\\Examples\\": "examples/"
 		}
 	},
 	"scripts": {

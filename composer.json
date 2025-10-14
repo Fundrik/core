@@ -12,7 +12,7 @@
 	],
 	"homepage": "https://fundrik.ru",
 	"type": "library",
-	"license": "GPL-3.0-or-later",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Denis Yanchevskiy",
@@ -21,8 +21,8 @@
 	],
 	"support": {
 		"email": "denis@denisco.pro",
-		"issues": "https://github.com/Fundrik/core/issues",
-		"source": "https://github.com/Fundrik/core"
+		"issues": "https://github.com/fundrik/core/issues",
+		"source": "https://github.com/fundrik/core"
 	},
 	"require": {
 		"php": "^8.2",

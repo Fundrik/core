@@ -25,7 +25,7 @@ final readonly class CampaignTarget {
 	 * @since 0.1.0
 	 *
 	 * @param bool $is_enabled Whether targeting is enabled.
-	 * @param int $amount The fundraising target amount.
+	 * @param int $amount The target amount in minor currency units, must be >= 0 when targeting is enabled.
 	 */
 	private function __construct(
 		private bool $is_enabled,
@@ -68,7 +68,7 @@ final readonly class CampaignTarget {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @return bool True if targeting is enabled, false otherwise.
+	 * @return bool True if targeting is enabled.
 	 */
 	public function is_enabled(): bool {
 
@@ -94,7 +94,7 @@ final readonly class CampaignTarget {
 	 *
 	 * @param self $other The target to compare with.
 	 *
-	 * @return bool True if the two target objects are equal, false otherwise.
+	 * @return bool True if the two target objects are equal.
 	 */
 	public function equals( self $other ): bool {
 

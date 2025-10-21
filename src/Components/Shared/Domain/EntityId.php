@@ -116,7 +116,7 @@ final readonly class EntityId {
 	 *
 	 * @param self $other The EntityId to compare with.
 	 *
-	 * @return bool True if the two EntityId objects are equal, false otherwise.
+	 * @return bool True if the two EntityId objects are equal.
 	 */
 	public function equals( self $other ): bool {
 

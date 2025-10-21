@@ -7,7 +7,7 @@ namespace Fundrik\Core\Components\Campaigns\Domain\Exceptions;
 use Fundrik\Core\Components\Shared\Domain\Exceptions\FundrikDomainException;
 
 /**
- * Serves as the base exception for campaign domain-layer errors.
+ * Serves as the base exception for campaign domain errors.
  *
  * @since 0.1.0
  */

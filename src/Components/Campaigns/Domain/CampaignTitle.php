@@ -67,7 +67,7 @@ final readonly class CampaignTitle {
 	 *
 	 * @param self $other The title to compare with.
 	 *
-	 * @return bool True if the two title objects are equal, false otherwise.
+	 * @return bool True if the two title objects are equal.
 	 */
 	public function equals( self $other ): bool {
 

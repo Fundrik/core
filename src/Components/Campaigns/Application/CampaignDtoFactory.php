@@ -10,7 +10,7 @@ use Fundrik\Core\Support\ArrayExtractor;
 use Fundrik\Core\Support\Exceptions\ArrayExtractionException;
 
 /**
- * Creates CampaignDto objects from arrays or domain entities.
+ * Creates CampaignDto objects.
  *
  * @since 0.1.0
  */
@@ -27,7 +27,7 @@ final readonly class CampaignDtoFactory {
 	 *        - is_active (bool): Whether the campaign is active.
 	 *        - is_open (bool): Whether the campaign is open.
 	 *        - has_target (bool): Whether the campaign has a target amount.
-	 *        - target_amount (int): The campaign target amount.
+	 *        - target_amount (int): The target amount in minor currency units, must be >= 0 when has_target is true.
 	 *
 	 * @phpstan-param array{
 	 *   id: int|string,
@@ -67,7 +67,7 @@ final readonly class CampaignDtoFactory {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param Campaign $campaign The source campaign entity.
+	 * @param Campaign $campaign The domain campaign entity.
 	 *
 	 * @return CampaignDto The DTO representation of the campaign.
 	 */

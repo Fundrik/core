@@ -244,7 +244,7 @@ final readonly class TypeCaster {
 	 *
 	 * @phpstan-assert-if-true Stringable $value
 	 *
-	 * @return bool True if the object is stringable, false otherwise.
+	 * @return bool True if the object is stringable.
 	 */
 	private static function is_stringable_object( mixed $value ): bool {
 

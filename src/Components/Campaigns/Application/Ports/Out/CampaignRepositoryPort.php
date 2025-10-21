@@ -51,7 +51,7 @@ interface CampaignRepositoryPort {
 	 *
 	 * @param Campaign $campaign The campaign entity to check.
 	 *
-	 * @return bool True if the campaign exists, false otherwise.
+	 * @return bool True if the campaign exists.
 	 *
 	 * @throws CampaignRepositoryExceptionInterface When the existence check fails.
 	 */

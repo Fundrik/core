@@ -231,7 +231,7 @@ final readonly class Campaign {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param int $amount The positive target amount.
+	 * @param int $amount The positive target amount in minor currency units.
 	 *
 	 * @return self The campaign with targeting enabled and amount set.
 	 *
@@ -279,7 +279,7 @@ final readonly class Campaign {
 	 *
 	 * @since 0.1.0
 	 *
-	 * @param int $amount The desired target amount (0 to disable; >0 to enable/update).
+	 * @param int $amount The desired target amount in minor currency units (0 to disable; >0 to enable/update).
 	 *
 	 * @return self The campaign with updated targeting state.
 	 *
